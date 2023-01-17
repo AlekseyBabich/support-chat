@@ -1,0 +1,5 @@
+.container {
+    grid-area: chatList;
+
+    background: cyan;
+}

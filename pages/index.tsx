@@ -1,4 +1,6 @@
 import {Inter} from '@next/font/google'
+import App from './../src/App'
+
 
 const inter = Inter({subsets: ['latin']})
 
@@ -6,7 +8,7 @@ export default function Home() {
     return (
 
         <div>
-            <h1>Здесь будет наш чат</h1>
+            <App/>
         </div>
 
 
