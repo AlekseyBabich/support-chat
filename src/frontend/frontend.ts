@@ -10,10 +10,10 @@ import {exitOnEnter} from "@src/frontend/util/exit-on-enter"
 const scriptName = path.parse(__filename).name
 async function main() {
 
-    const frontendEnv = process.env.FRONTEND_ENV
+    const frontendEnv = process.env.FRONTEND_ENV ?? 'dev'
 
     const koaServerPort =
-        process.env.PSWP_WEBAPP_PORT ? Number(process.env.PSWP_WEBAPP_PORT) : 8080
+        process.env.FRONTEND_ENV ? Number(process.env.FRONTEND_ENV) : 8080
 
     const nextApp = next({
         // implicit conf: ./next.config.js
