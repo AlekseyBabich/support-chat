@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router'
 
-const SupportChat = () => {
+
+
+
+const chatId = () => {
   const router = useRouter()
   const { chatId } = router.query
 
-  return <p>chatId: {chatId}</p>
+  return <p>chat_Id: { chatId }</p>
 }
 
-export default SupportChat;
+export default chatId
