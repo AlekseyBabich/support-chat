@@ -5,13 +5,35 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Badge } from '@mui/material'
+import { Badge, Modal } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
+import { Box } from "@mui/system";
+import Link from "next/link";
 
 
+
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  backgroundColor: 'white',
+  color: 'black ',
+  border: '2px solid #000',
+  borderRadius: '5px',
+  boxShadow: 24,
+  p: 4,
+};
 
 
 const Header = ( { handleMenu }: any ) => {
+  const [ open, setOpen ] = React.useState( false );
+  const handleOpen = () => setOpen( true );
+  const handleClose = () => setOpen( false );
+
+
   return (
     <AppBar position='static'>
       <Toolbar>
@@ -33,7 +55,22 @@ const Header = ( { handleMenu }: any ) => {
             <MailIcon/>
           </Badge>
         </IconButton>
-        <Button color='inherit'>Login</Button>
+        <Button color='inherit' onClick={ handleOpen }>Login</Button>
+        <Modal
+          open={ open }
+          onClose={ handleClose }
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={ style }>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={ { mt: 2 } }>
+              <Link href={''}>Тут будет ссылка на телеграмм</Link>
+            </Typography>
+          </Box>
+        </Modal>
       </Toolbar>
     </AppBar>
   )
