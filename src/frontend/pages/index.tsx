@@ -1,12 +1,21 @@
-import styles from '@src/frontend/styles/Home.module.css'
-import React from "react";
-import Header from "@component/Header/Header";
+import React from 'react'
+import DialogsList from '@component/Dialogs/DialogsList'
+import { Container } from '@mui/system'
+
+
+
 
 export default function Home() {
-    return (
-        <>
-            <Header/>
 
-        </>
-    )
+  return (
+    <DialogsList/>
+  )
 }
+  /* return (
+    <>
+      <Container sx={ { margin: '0 auto' } }>
+        <DialogsList/>
+      </Container>
+    </>
+  )
+} */
