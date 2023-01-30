@@ -7,7 +7,7 @@ const chatId = () => {
   const router = useRouter()
   const { chatId } = router.query
 
-  return <p>chat_Id: { chatId }</p>
+  return <h1>chat_Id: { chatId }</h1>
 }
 
 export default chatId

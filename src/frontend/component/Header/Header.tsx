@@ -7,8 +7,8 @@ import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import { Badge, Modal } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
-import { Box } from "@mui/system";
-import Link from "next/link";
+import { Box } from '@mui/system';
+import Link from 'next/link';
 
 
 
@@ -59,14 +59,14 @@ const Header = ( { handleMenu }: any ) => {
         <Modal
           open={ open }
           onClose={ handleClose }
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+          aria-labelledby='modal-modal-title'
+          aria-describedby='modal-modal-description'
         >
           <Box sx={ style }>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography id='modal-modal-title' variant='h6' component='h2'>
               Text in a modal
             </Typography>
-            <Typography id="modal-modal-description" sx={ { mt: 2 } }>
+            <Typography id='modal-modal-description' sx={ { mt: 2 } }>
               <Link href={''}>Тут будет ссылка на телеграмм</Link>
             </Typography>
           </Box>
