@@ -1,8 +1,9 @@
 import Koa from "koa";
 import Router from "koa-router";
-
 import logger from "koa-logger";
 import json from "koa-json";
+
+import Cors from "@src/backend/koa/cors";
 
 const app = new Koa();
 const router = new Router();
@@ -26,6 +27,7 @@ router.get("/token", async(ctx) => {
     return;
 })
 
+app.use(Cors());
 app.use(json());
 app.use(logger());
 

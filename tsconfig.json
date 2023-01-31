@@ -29,8 +29,7 @@
     "paths": {
       "@src/*": ["src/*"],
       "@component/*": ["src/frontend/component/*"],
-
-
+      "@config": ["src/config/config"],
     }
   },
   "exclude": [
