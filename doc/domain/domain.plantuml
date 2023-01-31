@@ -6,52 +6,22 @@ hide circle
 ' straight arrows
 ' skinparam linetype ortho
 entity User {
-  userId: autoincrement
+  id: autoincrement
   --
-  nickName: string
-  firstName?: string
-  lastName?: string
-
-  role: Role
-  userSubscription?: Subscription
-  userSubscriptionHistory?: SubscriptionHistory
 
   createdAt: date
   deletedAt?: date
 }
 
-note left of User::role
-  type Role = 'user' | 'admin'
-end note
+entity AuthLoginLink {
+  id: string
+  --
 
-note left of User::userSubscription
-  type Subscription =
-    | NoneSubscription
-    | Tier1Subscription
-    | Tier2Subscription
-
-  type NoneSubscription = {
-    tpe: 'NoneSubscription'
-  }
-
-  type Tier1Subscription = {
-    tpe: 'Tier1Subscription'
-  }
-
-  type Tier2Subscription = {
-    tpe: 'Tier1Subscription'
-  }
-end note
-
-note left of User::userSubscriptionHistory
-  type SubscriptionHistory = {
-    entries: SubscriptionHistoryEntry[]
-  }
-
-  type SubscriptionHistoryEntry = {
-    subscription: Subscription
-    timestamp: Date
-  }
-end note
+  userId: User
+  createdAt: date
+  activatedAt?: date
+  expireAt: date
+}
+AuthLoginLink }o--|| User
 
 @enduml
