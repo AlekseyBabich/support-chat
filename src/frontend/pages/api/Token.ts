@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from '@src/frontend/pages/api/helpers/axios';
 
 export interface Tokens {
   token: string,
@@ -8,7 +8,7 @@ export interface Tokens {
 export const getTokens = async (
     authLoginLinkId: string,
 ): Promise<Tokens> => {
-  const res = await axios.get<Tokens>('http://localhost:5100/token', {
+  const res = await axios.get<Tokens>('/token', {
     params: {
       authLoginLinkId: authLoginLinkId,
     }
