@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {getTokens, Tokens} from "@src/frontend/pages/api/Token";
+import { getTokens, Tokens } from "@src/frontend/pages/api/Token";
+import {useRouter} from "next/router";
 
+export interface Params {
+  authLoginLinkId: string;
+}
 
 const loginLink = () => {
   const [tokens, setTokens] = useState<Tokens>();
+  const router = useRouter();
 
   useEffect(() => {
-    getTokens('sdfsdfs').then((res) => { localStorage.setItem('tokens', JSON.stringify(res)) });
+    const query = router.query as unknown as Params;
+    getTokens(query.authLoginLinkId).then((res) => { localStorage.setItem('tokens', JSON.stringify(res)) });
     setTokens(JSON.parse(localStorage.getItem('tokens') || ''))
   }, [])
   /*
