@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "frontend": "node -r ts-node/register -r tsconfig-paths/register src/frontend/frontend.ts",
-    "backend": "node -r ts-node/register -r tsconfig-paths/register src/backend/backend.ts",
     "frontend-build": "cross-env NODE_OPTIONS=\"-r ts-node/register -r tsconfig-paths/register -r dotenv/config\" next build src/frontend",
+    "backend": "node -r ts-node/register -r tsconfig-paths/register src/backend/backend.ts",
+    "backend-db-migrate": "flyway -c src/backend/db/flyway-migration.js migrate",
     "start": "next start",
     "lint": "esw src/**",
     "lint-watch": "esw -w --changed src/**"
@@ -42,6 +43,7 @@
     "koa-router": "^12.0.0",
     "log4js": "^6.7.1",
     "next": "13.1.2",
+    "node-flywaydb": "^3.0.7",
     "nodemon": "^2.0.20",
     "pg": "^8.9.0",
     "react": "18.2.0",
