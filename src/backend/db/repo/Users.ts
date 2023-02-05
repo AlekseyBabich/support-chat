@@ -1,6 +1,6 @@
 import * as pg from 'pg'
-import { DB, DBConnection, DBClientLocator } from '@db'
-import { User } from '@entity'
+import { DB, DBConnection, DBClientLocator } from '@db/ScDB'
+import { User } from '@src/backend/db/type'
 
 /**
  * Users repository

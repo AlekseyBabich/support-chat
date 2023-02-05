@@ -31,7 +31,6 @@
       "@component/*": ["src/frontend/component/*"],
       "@config": ["src/config/config"],
       "@db/*": ["src/backend/db/*"],
-      "@logger": ["src/backend/util/Logger"]
     }
   },
   "exclude": [
