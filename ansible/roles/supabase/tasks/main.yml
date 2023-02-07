@@ -1,0 +1,99 @@
+---
+
+# https://github.com/supabase/supabase/commit/ef1ed7e6d6291266e70aef402f4d4b91e3910a90
+
+- name: Ensure supabase persist directories on docker host
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  with_items:
+    - "{{ persistent_volume }}/supabase"
+
+- name: Get running containers
+  community.docker.docker_host_info:
+    containers: yes
+  register: docker_info
+  when: "'flush' in ansible_run_tags"
+
+- name: Stop running containers
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ docker_info.containers | map(attribute='Id') | list }}"
+  when: "'flush' in ansible_run_tags"
+
+- name: Prune everything (including non-dangling images)
+  community.docker.docker_prune:
+    containers: true
+    images: true
+    images_filters:
+      dangling: true
+    networks: true
+    volumes: true
+    builder_cache: true
+    timeout: 300
+  when: "'flush' in ansible_run_tags"
+
+- name: Delete all configs and data
+  ansible.builtin.file:
+    state: absent
+    path: "{{ persistent_volume }}/supabase"
+  when: "'flush' in ansible_run_tags"
+
+- name: Copy common
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    decrypt: yes
+    dest: "{{ persistent_volume }}/supabase"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    force: true
+  with_fileglob:
+    - "{{ env }}.env"
+    - "*.yml"
+    - "refresh.yml"
+
+- name: Copy common
+  ansible.builtin.copy:
+    src: "volumes-{{ env }}/"
+    decrypt: yes
+    dest: "{{ persistent_volume }}/supabase/volumes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    force: true
+
+- name: Check if env file exists
+  stat: "path={{ persistent_volume }}/supabase/{{ env }}.env"
+  register: env_stat
+
+- name: Prepare env file
+  command: mv "{{ persistent_volume }}/supabase/{{ env }}.env" "{{ persistent_volume }}/supabase/.env"
+  when: env_stat.stat.exists
+
+- name: Create docker network pswp_network
+  ansible.builtin.shell: docker network create pswp_network --attachable || true
+
+- name: Docker-compose pull
+  ansible.builtin.shell: |
+    docker-compose -f docker-compose-supabase-db.yml pull
+    docker-compose -f docker-compose-supabase-services.yml pull
+  args:
+    chdir: "{{ persistent_volume }}/supabase"
+
+- name: Compose up - supabase-db
+  ansible.builtin.shell: |
+    docker-compose -f docker-compose-supabase-db.yml up -d
+  args:
+    chdir: "{{ persistent_volume }}/supabase"
+
+# TODO will not work without "psql create database pokerswap"
+# - name: Compose up - supabase-services
+#   ansible.builtin.shell: |
+#     docker-compose -f docker-compose-supabase-services.yml up -d
+#   args:
+#     chdir: "{{ persistent_volume }}/supabase"

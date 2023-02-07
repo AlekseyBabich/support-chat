@@ -1,31 +1,23 @@
-import React from 'react';
-
-
-
+import React, {useEffect, useState} from 'react';
+import { getTokens, Tokens } from "@src/frontend/pages/api/Token";
+import { useRouter } from "next/router";
 
 const loginLink = () => {
+  const [tokens, setTokens] = useState<Tokens>();
 
-  /*
-    const authByLoginLink: ( authLoginLink: string ) => Promise<{ token: string, refreshToken: string }>
-      = ( authLoginLink: string ) => Promise.resolve( { token: 'test', refreshToken: 'test' } )
-  */
+  const router = useRouter();
+  const authLoginLinkId = router.query.authLoginLinkId as unknown as string
 
-  async function authByLoginLink() {
-    const resolve: ( { token: string, refreshToken: string } ) = await ( { token: 'test', refreshToken: 'test' } )
-    return resolve
-  }
-
-  async function go() {
-    let a = await   authByLoginLink()
-    console.log( a )
-  }
-
-  go()
+  useEffect(() => {
+    getTokens(authLoginLinkId).then((res) => { setTokens(res) });
+  }, [authLoginLinkId])
 
   return (
-    <>
-      loginlink
-    </>
+    <div>
+        token: {tokens?.token}
+        <br/>
+        refreshToken: {tokens?.refreshToken}
+    </div>
   );
 };
 
