@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from '@config'
+import backend from '@config/backend'
 
 const instance = axios.create({
-    baseURL: config.baseApiURL,
+    baseURL: backend.baseApiURL,
 });
 
 export default instance;

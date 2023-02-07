@@ -32,15 +32,15 @@ router.get("/token", async(ctx) => {
             'authLoginLinkId': authLoginLinkId,
         }
 
-        await db.withTransaction( async (con) => {
-            const loginLink = await authLoginLinks.selectById(con, authLoginLinkId)
-            if(!loginLink){
-                ctx.body = "doesn't exist"
-                return 'empty'
-            }
-            ctx.body = loginLink
-            return 'ok'
-        })
+        // await db.withTransaction( async (con) => {
+        //     const loginLink = await authLoginLinks.selectById(con, authLoginLinkId)
+        //     if(!loginLink){
+        //         ctx.body = "doesn't exist"
+        //         return 'empty'
+        //     }
+        //     ctx.body = loginLink
+        //     return 'ok'
+        // })
         return;
     }
     ctx.body = ({ 'body': 'no authLoginLinkId' });
