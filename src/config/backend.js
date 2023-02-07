@@ -1,4 +1,4 @@
-function config() {
+function backend() {
     return {
         CORS: true,
         baseApiURL: 'http://localhost:5100',
@@ -12,4 +12,4 @@ function config() {
     }
 }
 
-module.exports = config();
+module.exports = backend();

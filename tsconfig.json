@@ -29,8 +29,11 @@
     "paths": {
       "@src/*": ["src/*"],
       "@component/*": ["src/frontend/component/*"],
-      "@config": ["src/config/config"],
+      "@config/backend": ["src/config/backend"],
       "@db/*": ["src/backend/db/*"],
+      "@db": ["src/backend/db/ScDB"],
+      "@entity": ["src/common/entity"],
+      "@logger": ["src/common/util/logger"]
     }
   },
   "exclude": [

@@ -1,8 +1,9 @@
-import path from 'path'
 import { Pool, PoolClient } from 'pg'
+import path from "path"
+import logger from "@logger"
 
-const log4js = require('log4js');
-const log = log4js.getLogger();
+const moduleName = path.parse(__filename).name
+const log = logger({ name: moduleName })
 
 export type DBConnection = string
 

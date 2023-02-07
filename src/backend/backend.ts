@@ -1,12 +1,20 @@
 import Koa from "koa";
 import Router from "koa-router";
+import { Pool } from 'pg'
 import logger from "koa-logger";
 import json from "koa-json";
 
 import Cors from "@src/backend/koa/cors";
+import { makeAuthLoginLinks } from "@db/repo";
+import {makeDB} from "@db";
+import backend from "@config/backend"
 
 const app = new Koa();
 const router = new Router();
+
+const dbPool = new Pool(backend.db)
+const db = makeDB(dbPool)
+const authLoginLinks = makeAuthLoginLinks(db)
 
 router.get("/", async(ctx, next) => {
     ctx.body = { msg: "Hello, it's Chat Support" };
@@ -23,6 +31,11 @@ router.get("/token", async(ctx) => {
                 'gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
             'authLoginLinkId': authLoginLinkId,
         }
+
+        await db.withTransaction( async (con) => {
+            ctx.body = await authLoginLinks.selectById(con, 'a0bd4660-a6dd-11ed-afa1-0242ac120002')
+            return 'ok'
+        })
         return;
     }
     ctx.body = ({ 'body': 'no authLoginLinkId' });

@@ -1,6 +1,6 @@
 import * as pg from 'pg'
-import { DB, DBConnection, DBClientLocator } from '@db/ScDB'
-import { AuthLoginLink } from '@src/backend/db/type'
+import { DB, DBConnection, DBClientLocator } from '@db'
+import { AuthLoginLink } from '@entity'
 
 /**
  * AuthLoginLinks repository
