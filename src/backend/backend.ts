@@ -4,7 +4,7 @@ import { Pool } from 'pg'
 import logger from "koa-logger";
 import json from "koa-json";
 
-import Cors from "@src/backend/koa/cors";
+import Cors from "@cors";
 import { makeAuthLoginLinks } from "@db/repo";
 import {makeDB} from "@db";
 import backend from "@config/backend"
@@ -22,7 +22,7 @@ router.get("/", async(ctx, next) => {
 })
 
 router.get("/token", async(ctx) => {
-    const authLoginLinkId = ctx.request.query.authLoginLinkId;
+    const authLoginLinkId: string = ctx.request.query.authLoginLinkId as string;
     if(authLoginLinkId){
         ctx.body  = {
             'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lI' +
@@ -33,7 +33,12 @@ router.get("/token", async(ctx) => {
         }
 
         await db.withTransaction( async (con) => {
-            ctx.body = await authLoginLinks.selectById(con, 'a0bd4660-a6dd-11ed-afa1-0242ac120002')
+            const loginLink = await authLoginLinks.selectById(con, authLoginLinkId)
+            if(!loginLink){
+                ctx.body = "doesn't exist"
+                return 'empty'
+            }
+            ctx.body = loginLink
             return 'ok'
         })
         return;
