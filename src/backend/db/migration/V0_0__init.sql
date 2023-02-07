@@ -1,6 +1,4 @@
-CREATE TABLE IF NOT EXISTS system_property(
-    system_property_key TEXT PRIMARY KEY,
-    system_property_value TEXT
+create table if not exists "SystemProperty"(
+    "systemPropertyKey" text primary key,
+    "systemPropertyValue" text
 );
-
-
