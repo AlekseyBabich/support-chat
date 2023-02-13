@@ -19,7 +19,7 @@ async function main() {
     process.env.FRONTEND_ENV ? Number( process.env.FRONTEND_ENV ) : 8080
 
   const nextApp = next( {
-    // implicit conf: ./next.config.js
+    // implicit conf: ./next.backend.js
     dev: frontendEnv == 'dev',
     dir: `${ __dirname }`
   } )
