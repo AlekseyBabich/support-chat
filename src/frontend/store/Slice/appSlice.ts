@@ -18,9 +18,6 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     sendMessage(state, action: PayloadAction<string>) {
-      console.log(state)
-      console.log(action)
-
       state.messages.push({
         id: Date.now(),
         text: action.payload
