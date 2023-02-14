@@ -15,7 +15,6 @@ const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) =>
       <TextField
         id='outlined-textarea'
         label='Введите сообщение'
-        placeholder='Placeholder'
         multiline
         fullWidth
         value={ text }

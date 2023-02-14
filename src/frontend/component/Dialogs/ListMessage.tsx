@@ -10,7 +10,17 @@ const ListMessage: React.FC = () => {
 
   return (
     <Box sx={ { p: '10px' } }>
-      { messages.map(m => <Paper key={ m.id } elevation={ 3 } sx={ { p: '10px' } }>{ m.text }</Paper>) }
+      { messages.map(message =>
+        <Box sx={ { p: '5px' } }>
+          <Paper key={ message.id }
+                 elevation={ 3 }
+                 sx={ { p: '10px' } }
+          >
+            { message.text }
+          </Paper>
+        </Box>
+      ) }
+
     </Box>
   );
 };
