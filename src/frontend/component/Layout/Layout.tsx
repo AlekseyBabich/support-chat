@@ -3,17 +3,15 @@ import Header from '@component/Header/Header';
 import Menu from '@component/Menu/Menu';
 
 
+const Layout = ({ children }: any) => {
 
-
-const Layout = ( { children }: any ) => {
-
-  const [ isMenuOpen, setMenuOpen ] = useState( false )
+  const [ isMenuOpen, setMenuOpen ] = useState(false)
 
   return (
     <header>
-      <Header handleMenu={ () => setMenuOpen( true ) }/>
+      <Header handleMenu={ () => setMenuOpen(true) }/>
       <Menu menuOpen={ isMenuOpen }
-            menuClose={ () => setMenuOpen( false ) }
+            menuClose={ () => setMenuOpen(false) }
       />
       { children }
 
