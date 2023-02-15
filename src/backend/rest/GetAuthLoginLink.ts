@@ -3,25 +3,34 @@ import {v4 as uuid} from "@lukeed/uuid/secure";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
-import {makeAuthLoginLinks} from "@db/repo";
+import {makeAuthLoginLinks, makeUsers} from "@db/repo";
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const authLoginLinks = makeAuthLoginLinks(db)
+const users = makeUsers(db)
 
 export function GetAuthLoginLink(){
     return async (ctx: ExtendableContext) => {
-        const userId: number = Number(ctx.request.query.userId) as number;
+        const userId: string = ctx.request.query.userId as string;
 
         if(userId){
             const authLoginLinkId = uuid()
+
             await db.withTransaction( async (con) => {
-                ctx.body = await authLoginLinks.insert(con, {
-                    id: authLoginLinkId,
-                    userId,
-                    createdAt: new Date(),
-                    expireAt: new Date()
-                })
+                const user = await users.selectById(con, userId)
+                if(user){
+                   const authLoginLink = await authLoginLinks.insert(con, {
+                        id: authLoginLinkId,
+                        userId,
+                        createdAt: new Date(),
+                        expireAt: new Date()
+                    })
+
+                    ctx.body = `${backend.frontendURL}/loginLink?authLoginLinkId=${authLoginLink.id}`
+                    return 'ok'
+                }
+                ctx.body = 'there is no'
                 return 'ok'
             })
             return;

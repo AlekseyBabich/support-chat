@@ -13,7 +13,7 @@ const router = new Router();
 
 router
     .get("/token", GetToken())
-    .get("/getAuthLoginLink", GetAuthLoginLink())
+    .post("/getAuthLoginLink", GetAuthLoginLink())
     .post("/signUp", SignUp())
 
 app.use(Cors());

@@ -58,7 +58,7 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
   public static authLoginLinkRowMapping(row: pg.QueryResultRow): AuthLoginLink {
     return {
       id: row.id,
-      userId: Number(row.userId),
+      userId: String(row.userId),
       createdAt: row.createdAt,
       activatedAt: row.activatedAt,
       expireAt: row.expireAt
