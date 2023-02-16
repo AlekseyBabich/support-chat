@@ -2,29 +2,47 @@ import {ExtendableContext} from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
-import {makeAuthLoginLinks, makeUsers} from "@db/repo";
+import {makeAuthLoginLinks} from "@db/repo";
 import {createClient} from "@supabase/supabase-js";
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const authLoginLinks = makeAuthLoginLinks(db)
-const users = makeUsers(db)
 const supabase = createClient(backend.db.supabaseUrl, backend.db.serviseRoleKey)
 
 export function GetToken(){
     return async (ctx: ExtendableContext) => {
         const authLoginLinkId: string = ctx.request.query.authLoginLinkId as string;
-
-        if(authLoginLinkId){
-            await db.withTransaction( async (con) => {
-                const authLoginLink = await authLoginLinks.selectById(con, authLoginLinkId)
-                const refreshToken = await supabase.from('auth_refresh_tokens').select().eq('user_id', authLoginLink?.userId)
-                ctx.body = ({ 'refreshToken': refreshToken })
-                return 'ok'
-            })
+        if(!authLoginLinkId){
+            ctx.body = ({ 'body': 'no authLoginLinkId' });
             return;
         }
-        ctx.body = ({ 'body': 'no authLoginLinkId' });
+
+        await db.withTransaction( async (con) => {
+            const authLoginLink = await authLoginLinks.selectById(con, authLoginLinkId)
+            if(!authLoginLink){
+                ctx.body = 'no authLoginLink'
+                return
+            }
+
+            const user  = await supabase.auth.admin.getUserById(authLoginLink.userId)
+
+            const email: string = user.data.user?.email as string
+            const leftBorder = email.indexOf('-')
+            const rightBorder = email.indexOf('@')
+            const uniqueNumber = email.slice(leftBorder + 1, rightBorder)
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: `user-${uniqueNumber}pas`,
+            })
+
+            ctx.body = {
+                accessToken: data.session?.access_token,
+                refreshToken: data.session?.refresh_token
+            }
+            return 'ok'
+        })
         return;
     }
 }

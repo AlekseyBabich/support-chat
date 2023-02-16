@@ -13,16 +13,16 @@ const users = makeUsers(db)
 export function SignUp(){
     return async (ctx: ExtendableContext) => {
         await db.withTransaction( async (con) => {
+            const uniqueNumber = Math.floor(Math.random() * 100000)
             const { data } = await supabase.auth.signUp({
-                email: `user-${Math.random() + 1}@chat.com`,
-                password: `Pa$$w0Rd#user-${Math.random() + 1}pA$$w0rD!`,
+                email: `user-${uniqueNumber}@email.com`,
+                password: `user-${uniqueNumber}pas`,
             })
 
             ctx.body = await users.insert(con, {
                 id: String(data.user?.id),
                 createdAt: new Date()
             })
-
             return 'ok'
         })
         return;

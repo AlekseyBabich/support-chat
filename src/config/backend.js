@@ -1,7 +1,7 @@
 const dotenv = require('dotenv')
 
 function backend() {
-    dotenv.config({ path: '.env' })
+    dotenv.config({ path: ".env" })
     return {
         CORS: true,
         baseApiURL: 'http://localhost:5100',
@@ -13,7 +13,7 @@ function backend() {
             password: 'postgres',
             database: 'chat',
             serviseRoleKey: `${process.env.SERVICE_ROLE_KEY}`,
-            supabaseUrl: 'http://localhost:8100/'
+            supabaseUrl: 'http://localhost:8100'
         }
     }
 }

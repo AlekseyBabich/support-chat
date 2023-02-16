@@ -14,28 +14,29 @@ export function GetAuthLoginLink(){
     return async (ctx: ExtendableContext) => {
         const userId: string = ctx.request.query.userId as string;
 
-        if(userId){
-            const authLoginLinkId = uuid()
-
-            await db.withTransaction( async (con) => {
-                const user = await users.selectById(con, userId)
-                if(user){
-                   const authLoginLink = await authLoginLinks.insert(con, {
-                        id: authLoginLinkId,
-                        userId,
-                        createdAt: new Date(),
-                        expireAt: new Date()
-                    })
-
-                    ctx.body = `${backend.frontendURL}/loginLink?authLoginLinkId=${authLoginLink.id}`
-                    return 'ok'
-                }
-                ctx.body = 'there is no'
-                return 'ok'
-            })
+        if(!userId){
+            ctx.body = ({ 'body': 'no userId' });
             return;
         }
-        ctx.body = ({ 'body': 'no userId' });
+        const authLoginLinkId = uuid()
+
+        await db.withTransaction( async (con) => {
+            const user = await users.selectById(con, userId)
+            if(!user){
+                ctx.body = 'no this user'
+                return
+            }
+
+            const authLoginLink = await authLoginLinks.insert(con, {
+                id: authLoginLinkId,
+                userId,
+                createdAt: new Date(),
+                expireAt: new Date()
+            })
+
+            ctx.body = `${backend.frontendURL}/loginLink?authLoginLinkId=${authLoginLink.id}`
+            return 'ok'
+        })
         return;
     }
 }
