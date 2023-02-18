@@ -1,21 +1,10 @@
 import React from 'react'
-import DialogsList from '@component/Dialogs/DialogsList'
-import { Container } from '@mui/system'
-
-
+import ChatPage from '@component/Dialogs/ChatPage'
 
 
 export default function Home() {
 
   return (
-    <DialogsList/>
+    <ChatPage/>
   )
 }
-  /* return (
-    <>
-      <Container sx={ { margin: '0 auto' } }>
-        <DialogsList/>
-      </Container>
-    </>
-  )
-} */

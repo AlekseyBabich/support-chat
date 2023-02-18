@@ -5,7 +5,7 @@ import { Box } from '@mui/system'
 
 
 
-const Dialogs = () => {
+const UserInfo = () => {
   return (
     <Grid item md={ 3 }>
       <Paper elevation={ 3 }
@@ -34,4 +34,4 @@ const Dialogs = () => {
   )
 }
 
-export default Dialogs
+export default UserInfo

@@ -9,6 +9,7 @@ import { Badge, Modal } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
 import { Box } from '@mui/system';
 import Link from 'next/link';
+import { useState } from "react";
 
 
 
@@ -27,9 +28,12 @@ const style = {
   p: 4,
 };
 
+interface HandleMenuProps  {
+  handleMenu: () => void,
+}
 
-const Header = ( { handleMenu }: any ) => {
-  const [ open, setOpen ] = React.useState( false );
+const Header = ( { handleMenu }: HandleMenuProps ) => {
+  const [ open, setOpen ] = useState( false );
   const handleOpen = () => setOpen( true );
   const handleClose = () => setOpen( false );
 

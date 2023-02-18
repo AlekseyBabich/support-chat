@@ -3,9 +3,7 @@ import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mu
 import MenuIcon from '@mui/icons-material/Menu'
 
 
-
-
-const Menu = ( props: any ) => {
+const Menu = (props: any) => {
 
   const {
     menuOpen,
