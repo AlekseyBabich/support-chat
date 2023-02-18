@@ -9,6 +9,7 @@ const Layout = ({ children }: any) => {
 
   return (
     <header>
+
       <Header handleMenu={ () => setMenuOpen(true) }/>
       <Menu menuOpen={ isMenuOpen }
             menuClose={ () => setMenuOpen(false) }

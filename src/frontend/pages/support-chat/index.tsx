@@ -1,14 +1,11 @@
 import * as React from 'react'
-import { Grid, Paper } from "@mui/material";
-import DialogsList from "@component/Dialogs/DialogsList";
-
-
+import ChatPage from "@component/Dialogs/ChatPage";
 
 
 const Chat = () => {
   return (
     <>
-      <DialogsList/>
+      <ChatPage/>
     </>
   )
 }
