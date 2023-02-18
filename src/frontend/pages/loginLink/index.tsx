@@ -14,7 +14,7 @@ const loginLink = () => {
 
   return (
     <div>
-        token: {tokens?.token}
+        token: {tokens?.accessToken}
         <br/>
         refreshToken: {tokens?.refreshToken}
     </div>
