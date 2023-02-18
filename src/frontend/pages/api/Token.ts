@@ -1,7 +1,7 @@
 import axios from '@src/frontend/pages/api/helpers/axios';
 
 export interface Tokens {
-  token: string,
+  accessToken: string,
   refreshToken: string
 }
 
