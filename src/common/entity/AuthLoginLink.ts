@@ -1,7 +1,7 @@
 
 export type AuthLoginLink = {
   id: string
-  userId: number
+  userId: string
   createdAt: Date
   activatedAt?: Date
   expireAt: Date

@@ -6,7 +6,7 @@ hide circle
 ' straight arrows
 ' skinparam linetype ortho
 entity User {
-  id: autoincrement
+  id: string
   --
 
   createdAt: date
