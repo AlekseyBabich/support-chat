@@ -44,7 +44,7 @@ export function GetAuthLoginLink(){
                 expireAt: addSeconds(new Date(), 45)
             })
 
-            ctx.body = `${backend.frontendURL}/loginLink?authLoginLinkId=${authLoginLink.id}`
+            ctx.body = { body: `${backend.frontendURL}/loginLink?authLoginLinkId=${authLoginLink.id}` }
             return 'ok'
         })
         return;
