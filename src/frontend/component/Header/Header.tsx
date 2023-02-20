@@ -59,7 +59,8 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
             <MailIcon/>
           </Badge>
         </IconButton>
-        <Button color='inherit' onClick={ handleOpen }>Login</Button>
+        <Button color='inherit'>Sing In</Button>
+        <Button color='inherit' onClick={ handleOpen }>Log In</Button>
         <Modal
           open={ open }
           onClose={ handleClose }

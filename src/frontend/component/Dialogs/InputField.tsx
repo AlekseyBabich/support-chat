@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from "@mui/system";
 import { Button, TextField } from "@mui/material";
+import { KeyboardEvent } from 'react'
 
 interface InputFieldProps {
   text: string
@@ -12,7 +13,11 @@ interface InputFieldProps {
 
 const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) => {
 
-
+  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addMessage()
+    }
+  }
 
   return (
     <Box>
@@ -23,6 +28,7 @@ const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) =>
         fullWidth
         value={ text }
         onChange={ e => setText(e.target.value) }
+        onKeyDown={sendByKey}
       />
       <Box>
         <Button variant='contained'
@@ -36,28 +42,3 @@ const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) =>
 
 export default InputField;
 
-/*
-const MessageInput = ({ onSubmit }) => {
-  const [messageText, setMessageText] = useState('')
-
-  const submitOnEnter = (event) => {
-    if (event.keyCode === 13) {
-      onSubmit(messageText)
-      setMessageText('')
-    }
-  }
-
-  return (
-    <>
-      <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text"
-        placeholder="Send a message"
-        value={messageText}
-        onChange={(e) => setMessageText(e.target.value)}
-        onKeyDown={(e) => submitOnEnter(e)}
-      />
-    </>
-  )
-}
-*/

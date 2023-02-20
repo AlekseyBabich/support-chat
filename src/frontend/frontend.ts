@@ -46,8 +46,6 @@ async function main() {
 main().catch( console.dir )
 
 
-/*  const log = pinoLogger({name: `${scriptName}-main`, level: 'debug'})
-  log.info({version})*/
 
 
 
