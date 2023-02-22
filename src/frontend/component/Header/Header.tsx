@@ -10,7 +10,8 @@ import MailIcon from '@mui/icons-material/Mail'
 import { Box } from '@mui/system';
 import Link from 'next/link';
 import { useState } from "react";
-
+import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
+import {signUpAT} from '../../store/Slice/authSlice'
 
 
 
@@ -36,6 +37,7 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
   const [ open, setOpen ] = useState( false );
   const handleOpen = () => setOpen( true );
   const handleClose = () => setOpen( false );
+  const dispatch = useAppDispatch()
 
 
   return (
@@ -59,7 +61,8 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
             <MailIcon/>
           </Badge>
         </IconButton>
-        <Button color='inherit'>Sing In</Button>
+        <Button color='inherit' onClick={() => dispatch(signUpAT())}>Sign Up</Button>
+{/*
         <Button color='inherit' onClick={ handleOpen }>Log In</Button>
         <Modal
           open={ open }
@@ -76,6 +79,7 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
             </Typography>
           </Box>
         </Modal>
+*/}
       </Toolbar>
     </AppBar>
   )

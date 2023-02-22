@@ -6,7 +6,7 @@ import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 
 const ListMessage: React.FC = () => {
 
-  const messages = useAppSelector(state => state.messages.messages)
+  const messages = useAppSelector(state => state.appReducer.messages)
 
   return (
     <Box sx={ { p: '10px' } }>
