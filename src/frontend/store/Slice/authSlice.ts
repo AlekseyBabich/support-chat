@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import instance from "@src/frontend/pages/api/helpers/axios";
+import { Tokens } from "@src/frontend/pages/api/Token";
 
 export interface AuthState {
   isAuth: boolean
@@ -29,6 +30,7 @@ export const signUpAT = createAsyncThunk(
         userId: data.id
     })
     window.location.href = link.data.body
+
     return // link.data.body
   }
 )
@@ -40,13 +42,13 @@ const authSlice = createSlice({
   reducers: {
     setTokens: (
       state,
-      { payload }: { payload: { secret?: string; refresh?: string } },
+      { payload }: { payload: Tokens },
     ) => {
-      if (payload.secret) {
-        state.token = payload.secret
+      if (payload.accessToken) {
+        state.token = payload.accessToken
       }
-      if (payload.refresh) {
-        state.refreshToken = payload.refresh
+      if (payload.refreshToken) {
+        state.refreshToken = payload.refreshToken
       }
       state.isAuth = true
     },
@@ -60,6 +62,7 @@ const authSlice = createSlice({
       state.status = 'resolver'
       state.token = action.payload
       state.refreshToken = action.payload
+      state.isAuth = true
     },
     [signUpAT.rejected.type]: (state, action) => {
       state.error = 'Какая то ошибка'

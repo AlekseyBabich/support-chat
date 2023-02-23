@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { getTokens, Tokens } from "@src/frontend/pages/api/Token";
 import { useRouter } from "next/router";
+import { setTokens } from "@src/frontend/store/Slice/authSlice";
+import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 
 const loginLink = () => {
-  const [tokens, setTokens] = useState<Tokens>();
-
+  //const [tokens, setTokens] = useState<Tokens>();
   const router = useRouter();
   const authLoginLinkId = router.query.authLoginLinkId as unknown as string
 
@@ -14,9 +15,9 @@ const loginLink = () => {
 
   return (
     <div>
-        token: {tokens?.accessToken}
+       {/* token: {tokens?.accessToken}*/}
         <br/>
-        refreshToken: {tokens?.refreshToken}
+        {/*refreshToken: {tokens?.refreshToken}*/}
     </div>
   );
 };

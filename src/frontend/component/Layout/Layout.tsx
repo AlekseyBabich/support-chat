@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Header from '@component/Header/Header';
 import Menu from '@component/Menu/Menu';
 
-
-const Layout = ({ children }: any) => {
+interface LayoutProps {
+  children: ReactNode
+}
+const Layout = ({ children }: LayoutProps) => {
 
   const [ isMenuOpen, setMenuOpen ] = useState(false)
 

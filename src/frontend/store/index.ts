@@ -4,8 +4,8 @@ import authReducer from './Slice/authSlice'
 
 
 const rootReducer = combineReducers({
-  appReducer,
-  authReducer
+  app: appReducer,
+  auth: authReducer
 })
 
 const store = configureStore({
