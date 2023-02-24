@@ -44,16 +44,17 @@ const authSlice = createSlice({
       state,
       { payload }: { payload: Tokens },
     ) => {
-      if (payload.accessToken) {
-        state.token = payload.accessToken
+/*
+debugger
+*/
+      state.token = payload.accessToken
+      state.refreshToken = payload.refreshToken
+      if(payload.accessToken) {
+        state.isAuth = true
       }
-      if (payload.refreshToken) {
-        state.refreshToken = payload.refreshToken
-      }
-      state.isAuth = true
     },
   },
-  extraReducers: {
+ /* extraReducers: {
     [signUpAT.pending.type]: (state) => {
       state.status = 'loading'
       state.error = null
@@ -67,7 +68,7 @@ const authSlice = createSlice({
     [signUpAT.rejected.type]: (state, action) => {
       state.error = 'Какая то ошибка'
     },
-  }
+  }*/
 })
 
 export const {

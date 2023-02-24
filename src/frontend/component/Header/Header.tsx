@@ -1,18 +1,17 @@
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Badge, Modal } from '@mui/material'
+import { Badge, Modal, TextField } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
 import { Box } from '@mui/system';
-import Link from 'next/link';
-import { useState } from "react";
-import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
-import {signUpAT} from '../../store/Slice/authSlice'
-
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
+import { signUpAT } from '../../store/Slice/authSlice'
+import { KeyboardEvent } from 'react'
 
 
 const style = {
@@ -38,7 +37,21 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
   const handleOpen = () => setOpen( true );
   const handleClose = () => setOpen( false );
   const dispatch = useAppDispatch()
+  const {isAuth} = useAppSelector(state => state.auth)
 
+
+
+  useEffect(() => {
+    console.log(isAuth)
+  }, [isAuth])
+
+/*
+  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addMessage()
+    }
+  }
+*/
 
   return (
     <AppBar position='static'>
@@ -61,9 +74,16 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
             <MailIcon/>
           </Badge>
         </IconButton>
-        <Button color='inherit' onClick={() => dispatch(signUpAT())}>Sign Up</Button>
-{/*
-        <Button color='inherit' onClick={ handleOpen }>Log In</Button>
+        { !isAuth
+          ?
+            <div>
+                <Button color='inherit' onClick={ () => dispatch(signUpAT()) }>Зарегистрироваться</Button>
+                <Button color='inherit' onClick={ handleOpen }>Войти</Button>
+            </div>
+          :
+            <Button color='inherit'>Выйти</Button>
+        }
+
         <Modal
           open={ open }
           onClose={ handleClose }
@@ -71,15 +91,34 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
           aria-describedby='modal-modal-description'
         >
           <Box sx={ style }>
+            <TextField
+              id='outlined-textarea'
+              label='Введите userName'
+              multiline
+              fullWidth
+/*
+              value={ text }
+              onChange={ e => setText(e.target.value) }
+              onKeyDown={ sendByKey }
+*/
+            />
+            <Button variant='contained'
+                    sx={ { mt: '10px' } }
+                    /*onClick={ addMessage }*/
+            >Отправить</Button>
+
+{/*
             <Typography id='modal-modal-title' variant='h6' component='h2'>
               Text in a modal
             </Typography>
             <Typography id='modal-modal-description' sx={ { mt: 2 } }>
               <Link href={''}>Тут будет ссылка на телеграмм</Link>
             </Typography>
+*/}
+
           </Box>
         </Modal>
-*/}
+
       </Toolbar>
     </AppBar>
   )
