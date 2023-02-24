@@ -5,7 +5,7 @@ import { Link } from "@mui/material";
 
 
 export default function Home() {
-  const { isAuth, token, refreshToken } = useAppSelector(state => state.auth)
+  const { isAuth, token, refreshToken, userName } = useAppSelector(state => state.auth)
   const router = useRouter()
 
   useEffect(() => {
@@ -18,9 +18,10 @@ export default function Home() {
   return (
     <>
       <h1>Домашняя страница</h1>
-      <h3>isAuth: { isAuth }</h3>
+      <h3>isAuth: { String(isAuth) }</h3>
       <h3>Token: { token ?? 'Сгорели?' }</h3>
       <h3>refreshToken: { refreshToken ?? 'Сгорели?' }</h3>
+      <h3>userName: { String(userName) }</h3>
 
     </>
   )
