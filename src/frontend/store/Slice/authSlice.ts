@@ -40,19 +40,18 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setTokens: (
-      state,
-      { payload }: { payload: Tokens },
-    ) => {
-/*
-debugger
-*/
+    setTokens: (state, { payload }: { payload: Tokens }) => {
       state.token = payload.accessToken
       state.refreshToken = payload.refreshToken
       if(payload.accessToken) {
         state.isAuth = true
       }
     },
+    logout: (state) => {
+      state.token = null
+      state.refreshToken = null
+      state.isAuth = false
+    }
   },
  /* extraReducers: {
     [signUpAT.pending.type]: (state) => {
@@ -72,7 +71,8 @@ debugger
 })
 
 export const {
-setTokens
+  setTokens,
+  logout
 } = authSlice.actions
 
 export default authSlice.reducer

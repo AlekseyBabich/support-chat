@@ -19,14 +19,12 @@ const loginLink = () => {
     if (!isAuth) {
       router.push('/')
     }
-  }, [authLoginLinkId])
+  }, [authLoginLinkId, isAuth])
 
 
   return (
     <div>
-       {/* token: {tokens?.accessToken}*/}
-        <br/>
-        {/*refreshToken: {tokens?.refreshToken}*/}
+
     </div>
   );
 };
