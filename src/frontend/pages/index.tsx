@@ -4,20 +4,27 @@ import { useRouter } from "next/router";
 
 
 export default function Home() {
-/*
-  const { isAuth } = useAppSelector(state => state.auth)
+  const { isAuth, token, refreshToken } = useAppSelector(state => state.auth)
   const router = useRouter()
 
+/*
   useEffect(() => {
     if (!isAuth) {
-      router.push('/loginLink')
+      router.push('/login')
     }
   }, [])
+
+  console.log(isAuth)
+  console.log(token)
+  console.log(refreshToken)
 */
 
   return (
     <>
-      <div>Домашняя страница</div>
+      <h1>Домашняя страница</h1>
+      <h3>isAuth: { isAuth }</h3>
+      <h3>Token: { token }</h3>
+      <h3>refreshToken: { refreshToken }</h3>
     </>
   )
 }
