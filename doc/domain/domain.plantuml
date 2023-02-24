@@ -9,6 +9,7 @@ entity User {
   id: string
   --
 
+  name: string
   createdAt: date
   deletedAt?: date
 }

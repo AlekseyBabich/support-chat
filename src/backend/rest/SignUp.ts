@@ -11,9 +11,36 @@ const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const users = makeUsers(db)
 
+interface SignUp{
+    userName: string;
+}
+
 export function SignUp(){
     return async (ctx: ExtendableContext) => {
+        const body = <SignUp>ctx.request.body;
+
+        if(!body.userName){
+            ctx.body = ({
+                body: 'no userName',
+                status_code: ctx.status
+            });
+            return 'error';
+        }
+
         await db.withTransaction( async (con) => {
+            const { data } = await supabase
+              .from('Users')
+              .select()
+              .eq('name', body.userName)
+              .single()
+
+            if(data){
+                ctx.body = {
+                    body: 'A user with that name already exists',
+                    status_code: ctx.status
+                }
+                return 'error'
+            }
             const userId = uuid()
 
             await supabase.auth.admin.createUser({
@@ -25,6 +52,7 @@ export function SignUp(){
 
             ctx.body = await users.insert(con, {
                 id: userId,
+                name: body.userName,
                 createdAt: new Date()
             })
             return 'ok'

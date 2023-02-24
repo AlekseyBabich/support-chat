@@ -9,6 +9,7 @@ import {GetAuthLoginLink} from "@src/backend/rest/GetAuthLoginLink";
 import {SignUp} from "@src/backend/rest/SignUp";
 import bodyParser from "koa-bodyparser";
 import { RefreshAccessToken } from "@src/backend/rest/RefreshAccessToken";
+import { Login } from "@src/backend/rest/Login";
 
 const app = new Koa();
 const router = new Router();
@@ -17,6 +18,7 @@ router
     .get("/token", GetToken())
     .post("/getAuthLoginLink", GetAuthLoginLink())
     .post("/signUp", SignUp())
+    .post("/login", Login())
     .post("/refreshAccessToken", RefreshAccessToken())
 
 app.use(Cors());
