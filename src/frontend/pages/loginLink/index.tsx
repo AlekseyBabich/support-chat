@@ -12,9 +12,6 @@ const loginLink = () => {
   const authLoginLinkId = router.query.authLoginLinkId as unknown as string
 
   useEffect(() => {
-/*
-    debugger
-*/
     getTokens(authLoginLinkId).then((res) =>  dispatch(setTokens(res)) );
     if (!isAuth) {
       router.push('/')

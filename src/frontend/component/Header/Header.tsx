@@ -29,32 +29,31 @@ const style = {
   p: 4,
 };
 
-interface HandleMenuProps  {
+interface HandleMenuProps {
   handleMenu: () => void,
 }
 
 
-const Header = ( { handleMenu }: HandleMenuProps ) => {
-  const [ open, setOpen ] = useState( false );
-  const handleOpen = () => setOpen( true );
-  const handleClose = () => setOpen( false );
+const Header = ({ handleMenu }: HandleMenuProps) => {
+  const [ open, setOpen ] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const dispatch = useAppDispatch()
-  const {isAuth} = useAppSelector(state => state.auth)
+  const { isAuth } = useAppSelector(state => state.auth)
   const router = useRouter()
 
 
-
   useEffect(() => {
-    console.log(isAuth)
-  }, [isAuth])
+    if(!isAuth) window.localStorage.clear()
+  }, [ isAuth ])
 
-/*
-  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      addMessage()
+  /*
+    const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        addMessage()
+      }
     }
-  }
-*/
+  */
 
   return (
     <AppBar position='static'>
@@ -99,12 +98,12 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
         </IconButton>
         { !isAuth
           ?
-            <div>
-                <Button color='inherit' onClick={ () => dispatch(signUpAT()) }>Зарегистрироваться</Button>
-                <Button color='inherit' onClick={ handleOpen }>Войти</Button>
-            </div>
+          <div>
+            <Button color='inherit' onClick={ () => dispatch(signUpAT(String(prompt('Введите имя')))) }>Зарегистрироваться</Button>
+            <Button color='inherit' onClick={ handleOpen }>Войти</Button>
+          </div>
           :
-            <Button color='inherit' onClick={() => dispatch(logout())}>Выйти</Button>
+          <Button color='inherit' onClick={ () => dispatch(logout()) }>Выйти</Button>
         }
 
         <Modal
@@ -119,25 +118,25 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
               label='Введите userName'
               multiline
               fullWidth
-/*
-              value={ text }
-              onChange={ e => setText(e.target.value) }
-              onKeyDown={ sendByKey }
-*/
+              /*
+                            value={ text }
+                            onChange={ e => setText(e.target.value) }
+                            onKeyDown={ sendByKey }
+              */
             />
             <Button variant='contained'
                     sx={ { mt: '10px' } }
-                    /*onClick={ addMessage }*/
+              /*onClick={ addMessage }*/
             >Отправить</Button>
 
-{/*
+            {/*
             <Typography id='modal-modal-title' variant='h6' component='h2'>
               Text in a modal
             </Typography>
             <Typography id='modal-modal-description' sx={ { mt: 2 } }>
               <Link href={''}>Тут будет ссылка на телеграмм</Link>
             </Typography>
-*/}
+*/ }
 
           </Box>
         </Modal>

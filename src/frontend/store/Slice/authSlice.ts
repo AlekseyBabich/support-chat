@@ -4,6 +4,7 @@ import { Tokens } from "@src/frontend/pages/api/Token";
 
 export interface AuthState {
   isAuth: boolean
+  userName: string | null
   token: string | null
   refreshToken: string | null
   telegramAuthLink: string | null
@@ -13,6 +14,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   isAuth: false,
+  userName: null,
   token: null,
   refreshToken: null,
   telegramAuthLink: null,
@@ -22,8 +24,8 @@ const initialState: AuthState = {
 
 export const signUpAT = createAsyncThunk(
   'auth/signUpAT',
-  async function () {
-    const response = await instance.post('/signUp')
+  async function (username: string) {
+    const response = await instance.post('/signUp', {userName: username})
     const data = await response.data
     if(!data) return
     const link = await instance.post('/getAuthLoginLink', {
@@ -51,23 +53,22 @@ const authSlice = createSlice({
       state.token = null
       state.refreshToken = null
       state.isAuth = false
+
     }
   },
- /* extraReducers: {
+  extraReducers: {
     [signUpAT.pending.type]: (state) => {
       state.status = 'loading'
       state.error = null
     },
     [signUpAT.fulfilled.type]: (state, action) => {
       state.status = 'resolver'
-      state.token = action.payload
-      state.refreshToken = action.payload
-      state.isAuth = true
+      state.userName = action.payload.userName
     },
     [signUpAT.rejected.type]: (state, action) => {
       state.error = 'Какая то ошибка'
     },
-  }*/
+  }
 })
 
 export const {
