@@ -28,6 +28,19 @@ export function SignUp(){
         }
 
         await db.withTransaction( async (con) => {
+            const { data } = await supabase
+              .from('Users')
+              .select()
+              .eq('name', body.userName)
+              .single()
+
+            if(data){
+                ctx.body = {
+                    body: 'A user with that name already exists',
+                    status_code: ctx.status
+                }
+                return 'error'
+            }
             const userId = uuid()
 
             await supabase.auth.admin.createUser({
