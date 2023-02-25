@@ -7,31 +7,31 @@ import { User } from '@entity'
  */
 export interface Users {
   insert(
-      connection: DBConnection,
-      user: User
+    connection: DBConnection,
+    user: User
   ): Promise<User>
 
   update(
-      connection: DBConnection,
-      user: User
+    connection: DBConnection,
+    user: User
   ): Promise<number>
 
   selectById(
-      connection: DBConnection,
-      id: string
+    connection: DBConnection,
+    id: string
   ): Promise<User | undefined>
 
   selectByIds(
-      connection: DBConnection,
-      ids: string[]
+    connection: DBConnection,
+    ids: string[]
   ): Promise<User[]>
 
   selectAll(
-      connection: DBConnection,
-      sortField: 'id' | 'createdAt' | 'deletedAt',
-      sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
-      offset: number,
-      limit: number | 'all'
+    connection: DBConnection,
+    sortField: 'id' | 'name' | 'createdAt' | 'deletedAt',
+    sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
+    offset: number,
+    limit: number | 'all'
   ): Promise<User[]>
 }
 
@@ -48,6 +48,7 @@ export class UsersImpl implements Users {
   /*
   create table if not exists "Users" (
     "id" text primary key,
+    "name" text not null,
     "createdAt" timestamptz not null,
     "deletedAt" timestamptz
   )
@@ -56,6 +57,7 @@ export class UsersImpl implements Users {
   public static userRowMapping(row: pg.QueryResultRow): User {
     return {
       id: row.id,
+      name: row.name,
       createdAt: row.createdAt,
       deletedAt: row.deletedAt
     }
@@ -65,8 +67,9 @@ export class UsersImpl implements Users {
     const params: any[] = []
     if (user.id != null) params.push(user.id)
     params.push(
-        user.createdAt,
-        user.deletedAt
+      user.name,
+      user.createdAt,
+      user.deletedAt
     )
     return params
   }
@@ -76,16 +79,17 @@ export class UsersImpl implements Users {
   //
 
   async insert(
-      connection: DBConnection,
-      user: User
+    connection: DBConnection,
+    user: User
   ): Promise<User> {
     const sql = `
       insert into "Users" (
         "id",
+        "name",
         "createdAt",
         "deletedAt"
       )
-      values ($1, $2, $3)
+      values ($1, $2, $3, $4)
     `
 
     const params: any[] = UsersImpl.userParamsMapping(user)
@@ -98,13 +102,14 @@ export class UsersImpl implements Users {
   }
 
   async update(
-      connection: DBConnection,
-      user: User
+    connection: DBConnection,
+    user: User
   ): Promise<number> {
     const sql = `
       update "Users" set
-                       "createdAt" = $2,
-                       "deletedAt" = $3
+        "name" = $2,
+        "createdAt" = $3,
+        "deletedAt" = $4
       where "id" = $1
     `
 
@@ -116,8 +121,8 @@ export class UsersImpl implements Users {
   }
 
   async selectById(
-      connection: DBConnection,
-      id: string
+    connection: DBConnection,
+    id: string
   ): Promise<User | undefined> {
     const sql = `
       select * from "Users" where "id" = $1
@@ -131,8 +136,8 @@ export class UsersImpl implements Users {
   }
 
   async selectByIds(
-      connection: DBConnection,
-      ids: string[]
+    connection: DBConnection,
+    ids: string[]
   ): Promise<User[]> {
     const sql = `
       select * from "Users" where "id" = any($1)
@@ -146,16 +151,16 @@ export class UsersImpl implements Users {
   }
 
   async selectAll(
-      connection: DBConnection,
-      sortField: 'id' | 'createdAt' | 'deletedAt',
-      sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
-      offset: number,
-      limit: number | 'all'
+    connection: DBConnection,
+    sortField: 'id' | 'name' | 'createdAt' | 'deletedAt',
+    sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
+    offset: number,
+    limit: number | 'all'
   ): Promise<User[]> {
     const sql = `
       select * from "Users"
       order by "${sortField}" ${sortDirection}
-               ${['asc', 'desc'].includes(sortDirection) ? 'nulls last' : ''}
+      ${['asc', 'desc'].includes(sortDirection) ? 'nulls last' : ''}
       limit ${limit} offset ${offset}
     `
 
