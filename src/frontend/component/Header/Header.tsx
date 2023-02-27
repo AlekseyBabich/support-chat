@@ -40,12 +40,11 @@ const Header = ({ handleMenu }: HandleMenuProps) => {
 
 
 
-
-/*  if (username && username.length !== 0) {
+/*  if (userName && userName.length !== 0) {
     const {
       response,
       isLoading,
-    } = useCreateUser(username && username)
+    } = useCreateUser(userName && userName)
     if (response && response.data.name) {
       dispatch(setUserName(response.data.name))
     }

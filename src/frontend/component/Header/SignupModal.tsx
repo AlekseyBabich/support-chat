@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
 import { LoginModalProps } from "@component/Header/LoginModal";
+import { useCreateUser } from "@src/frontend/store/Hooks/authHooks/useCreateUser";
+import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
+import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
 
 
 
@@ -22,6 +25,28 @@ const style = {
 };
 
 const SignupModal = ({ open, handleClose }: LoginModalProps) => {
+
+  const [ userName, setUserName ] = useState('')
+  const dispatch = useAppDispatch()
+  const createUserName = (e: any) => {
+    const name = e.target.value
+    debugger
+    console.log(name)
+    setUserName(name)
+  }
+
+
+  if (userName && userName.trim().length) {
+    const {
+      response,
+      isLoading,
+
+    } = useCreateUser(userName && userName)
+    if (response && response.data.name) {
+      dispatch(setNewUserName(response.data.name))
+    }
+  }
+
   return (
     <div>
       <Modal
@@ -36,25 +61,17 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
               label='Введите userName'
               multiline
               fullWidth
-              /*
-                            value={ text }
-                            onChange={ e => setText(e.target.value) }
-                            onKeyDown={ sendByKey }
-              */
+              value={ userName }
+              onChange={ e => setUserName(e.target.value) }
+/*
+              onKeyDown={ sendByKey }
+*/
             />
             <Button variant='contained'
                     sx={ { mt: '10px' } }
-              /*onClick={ addMessage }*/
-            >Отправить</Button>
+              onClick={ createUserName }
+            >Зарегистрироваться</Button>
 
-            {/*
-            <Typography id='modal-modal-title' variant='h6' component='h2'>
-              Text in a modal
-            </Typography>
-            <Typography id='modal-modal-description' sx={ { mt: 2 } }>
-              <Link href={''}>Тут будет ссылка на телеграмм</Link>
-            </Typography>
-*/ }
 
           </Box>
         </Modal>

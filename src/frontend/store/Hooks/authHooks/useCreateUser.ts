@@ -2,14 +2,14 @@ import { useMutation, useQuery } from "react-query";
 import { authService } from "@src/frontend/services/auth.service";
 
 
-export const useCreateUser = (username: string) => {
+export const useCreateUser = (userName: string) => {
   const { isLoading, data: response } = useMutation(
     'create user',
-    () => authService.createUser(username), {
+    () => authService.createUser(userName), {
       onError: (error: any) => {
         alert(error.message)
       },
     }
   )
-  return { isLoading, response }
+  return { isLoading, response, }
 }
