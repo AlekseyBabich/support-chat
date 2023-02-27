@@ -1,3 +1,4 @@
+/*
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 
@@ -21,3 +22,4 @@ export const signUpApi = createApi({
 })
 
 export const {useCreateUserMutation} = signUpApi
+*/

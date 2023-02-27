@@ -22,7 +22,7 @@ const initialState: AuthState = {
   error: null,
 }
 
-export const signUpAT = createAsyncThunk(
+/*export const signUpAT = createAsyncThunk(
   'auth/signUpAT',
   async function (username: string) {
     const response = await instance.post('/signUp', {userName: username})
@@ -35,13 +35,16 @@ export const signUpAT = createAsyncThunk(
 
     return // link.data.body
   }
-)
+)*/
 
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setUserName: (state, action) => {
+      state.userName = action.payload.name
+    },
     setTokens: (state, { payload }: { payload: Tokens }) => {
       state.token = payload.accessToken
       state.refreshToken = payload.refreshToken
@@ -56,7 +59,7 @@ const authSlice = createSlice({
 
     }
   },
-  extraReducers: {
+ /* extraReducers: {
     [signUpAT.pending.type]: (state) => {
       state.status = 'loading'
       state.error = null
@@ -68,12 +71,14 @@ const authSlice = createSlice({
     [signUpAT.rejected.type]: (state, action) => {
       state.error = 'Какая то ошибка'
     },
-  }
+  }*/
 })
 
 export const {
+  setUserName,
   setTokens,
   logout
+
 } = authSlice.actions
 
 export default authSlice.reducer

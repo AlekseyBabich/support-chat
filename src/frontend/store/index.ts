@@ -3,13 +3,17 @@ import appReducer from './Slice/appSlice'
 import authReducer from './Slice/authSlice'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+/*
 import { signUpApi } from "@src/frontend/pages/api/queryApi/signUpApi";
+*/
 
 
 const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
+/*
   [signUpApi.reducerPath]: signUpApi.reducer
+*/
 })
 
 const persistConfig = {
@@ -24,7 +28,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(signUpApi.middleware),
+    })/*.concat(signUpApi.middleware),*/
 })
 
 export const persistor = persistStore(store)
