@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
 import { LoginModalProps } from "@component/Header/LoginModal";
-import { useCreateUser } from "@src/frontend/store/Hooks/authHooks/useCreateUser";
-import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
-
-
+import { useMutation } from "react-query";
+import { authService } from "@src/frontend/services/auth.service";
+import { useRouter } from "next/router";
 
 
 const style = {
@@ -25,26 +25,20 @@ const style = {
 };
 
 const SignupModal = ({ open, handleClose }: LoginModalProps) => {
-
   const [ userName, setUserName ] = useState('')
   const dispatch = useAppDispatch()
-  const createUserName = (e: any) => {
-    const name = e.target.value
-    debugger
-    console.log(name)
-    setUserName(name)
-  }
+  const router = useRouter()
 
+  const signUp = useMutation((name: string) =>
+    authService.createUser(name)
+  );
 
-  if (userName && userName.trim().length) {
-    const {
-      response,
-      isLoading,
+  const login = useMutation((name: string) =>
+    authService.loginUser(name)
+  );
 
-    } = useCreateUser(userName && userName)
-    if (response && response.data.name) {
-      dispatch(setNewUserName(response.data.name))
-    }
+  const submitUserName = () => {
+    signUp.mutate(userName);
   }
 
   return (
@@ -63,16 +57,11 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
               fullWidth
               value={ userName }
               onChange={ e => setUserName(e.target.value) }
-/*
-              onKeyDown={ sendByKey }
-*/
             />
             <Button variant='contained'
                     sx={ { mt: '10px' } }
-              onClick={ createUserName }
+              onClick={ submitUserName }
             >Зарегистрироваться</Button>
-
-
           </Box>
         </Modal>
     </div>
