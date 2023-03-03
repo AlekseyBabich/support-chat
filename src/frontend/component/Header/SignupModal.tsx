@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
 import { LoginModalProps } from "@component/Header/LoginModal";
-import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
-import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
-import { useMutation } from "react-query";
+import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
 import { authService } from "@src/frontend/services/auth.service";
 import { useRouter } from "next/router";
+import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
 
 
 const style = {
@@ -26,19 +25,30 @@ const style = {
 
 const SignupModal = ({ open, handleClose }: LoginModalProps) => {
   const [ userName, setUserName ] = useState('')
+
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  const signUp = useMutation((name: string) =>
-    authService.createUser(name)
-  );
-
-  const login = useMutation((name: string) =>
-    authService.loginUser(name)
-  );
-
   const submitUserName = () => {
-    signUp.mutate(userName);
+    handleClose()
+    if(!userName.trim().length) {
+      alert('Имя обязательно!')
+      return
+    }
+
+    authService.createUser(userName).then((user) => {
+      if(user.data.status_code == 404){
+        alert('Пользователей с таким именем уже есть!')
+        return
+      }
+
+      authService.loginUser(user.data.name).then((link) => {
+        dispatch(setNewUserName({name: user.data.name}))
+        router.push(link.data.body)
+      })
+    })
+
+    setUserName('')
   }
 
   return (

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Modal, TextField } from "@mui/material";
-
+import { authService } from "@src/frontend/services/auth.service";
+import { useRouter } from "next/router";
+import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
+import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
 
 
 const style = {
@@ -23,6 +26,30 @@ export interface LoginModalProps {
 }
 
 const LoginModal = ({ open, handleClose }: LoginModalProps) => {
+  const [ userName, setUserName ] = useState('')
+
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const submitUserName = () => {
+    handleClose()
+    if(!userName.trim().length) {
+      alert('Имя обязательно!')
+      return
+    }
+
+    authService.loginUser(userName).then((link) => {
+      if(link.data.status_code == 404){
+        alert('Пользователя с таким именем нет')
+        return
+      }
+
+      dispatch(setNewUserName({name: userName}))
+      router.push(link.data.body)
+    })
+
+    setUserName('')
+  }
   return (
     <div>
       <Modal
@@ -37,26 +64,13 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
               label='Введите userName'
               multiline
               fullWidth
-              /*
-                            value={ text }
-                            onChange={ e => setText(e.target.value) }
-                            onKeyDown={ sendByKey }
-              */
+              value={ userName }
+              onChange={ e => setUserName(e.target.value) }
             />
             <Button variant='contained'
                     sx={ { mt: '10px' } }
-              /*onClick={ addMessage }*/
+              onClick={ submitUserName }
             >Отправить</Button>
-
-            {/*
-            <Typography id='modal-modal-title' variant='h6' component='h2'>
-              Text in a modal
-            </Typography>
-            <Typography id='modal-modal-description' sx={ { mt: 2 } }>
-              <Link href={''}>Тут будет ссылка на телеграмм</Link>
-            </Typography>
-*/ }
-
           </Box>
         </Modal>
     </div>
