@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import instance from "@src/frontend/pages/api/helpers/axios";
+import { Tokens } from "@src/frontend/pages/api/Token";
 
 export interface AuthState {
   isAuth: boolean
+  userName: string | null
   token: string | null
   refreshToken: string | null
   telegramAuthLink: string | null
@@ -12,6 +14,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   isAuth: false,
+  userName: null,
   token: null,
   refreshToken: null,
   telegramAuthLink: null,
@@ -19,56 +22,63 @@ const initialState: AuthState = {
   error: null,
 }
 
-export const signUpAT = createAsyncThunk(
+/*export const signUpAT = createAsyncThunk(
   'auth/signUpAT',
-  async function () {
-    const response = await instance.post('/signUp')
+  async function (username: string) {
+    const response = await instance.post('/signUp', {userName: username})
     const data = await response.data
     if(!data) return
     const link = await instance.post('/getAuthLoginLink', {
         userId: data.id
     })
     window.location.href = link.data.body
+
     return // link.data.body
   }
-)
+)*/
 
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setTokens: (
-      state,
-      { payload }: { payload: { secret?: string; refresh?: string } },
-    ) => {
-      if (payload.secret) {
-        state.token = payload.secret
-      }
-      if (payload.refresh) {
-        state.refreshToken = payload.refresh
-      }
-      state.isAuth = true
+    setNewUserName: (state, action) => {
+      state.userName = action.payload.name
     },
+    setTokens: (state, { payload }: { payload: Tokens }) => {
+      state.token = payload.accessToken
+      state.refreshToken = payload.refreshToken
+      if(payload.accessToken) {
+        state.isAuth = true
+      }
+    },
+    logout: (state) => {
+      state.token = null
+      state.refreshToken = null
+      state.isAuth = false
+
+    }
   },
-  extraReducers: {
+ /* extraReducers: {
     [signUpAT.pending.type]: (state) => {
       state.status = 'loading'
       state.error = null
     },
     [signUpAT.fulfilled.type]: (state, action) => {
       state.status = 'resolver'
-      state.token = action.payload
-      state.refreshToken = action.payload
+      state.userName = action.payload.userName
     },
     [signUpAT.rejected.type]: (state, action) => {
       state.error = 'Какая то ошибка'
     },
-  }
+  }*/
 })
 
 export const {
-setTokens
+  setNewUserName,
+  setTokens,
+  logout
+
 } = authSlice.actions
 
 export default authSlice.reducer

@@ -1,44 +1,67 @@
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Badge, Modal } from '@mui/material'
+import { Badge, Link, Modal, TextField } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
 import { Box } from '@mui/system';
-import Link from 'next/link';
-import { useState } from "react";
-import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
-import {signUpAT} from '../../store/Slice/authSlice'
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
+import { logout, setUserName, signUpAT } from '../../store/Slice/authSlice'
+import { KeyboardEvent } from 'react'
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import { authService } from "@src/frontend/services/auth.service";
+import { useCreateUser } from "@src/frontend/store/Hooks/authHooks/useCreateUser";
+import LoginModal from "@component/Header/LoginModal";
+import SignupModal from "@component/Header/SignupModal";
 
 
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  backgroundColor: 'white',
-  color: 'black ',
-  border: '2px solid #000',
-  borderRadius: '5px',
-  boxShadow: 24,
-  p: 4,
-};
 
-interface HandleMenuProps  {
+interface HandleMenuProps {
   handleMenu: () => void,
 }
 
-const Header = ( { handleMenu }: HandleMenuProps ) => {
-  const [ open, setOpen ] = useState( false );
-  const handleOpen = () => setOpen( true );
-  const handleClose = () => setOpen( false );
-  const dispatch = useAppDispatch()
 
+const Header = ({ handleMenu }: HandleMenuProps) => {
+  const [ openLogin, setOpenLogin ] = useState(false);
+  const [ openSignup, setOpenSignup ] = useState(false);
+  const handleOpenLogin = () => setOpenLogin(true);
+  const handleOpenSignUp = () => setOpenSignup(true);
+  const handleCloseLogin = () => setOpenLogin(false);
+  const handleCloseSignup = () => setOpenSignup(false);
+  const dispatch = useAppDispatch()
+  const { isAuth } = useAppSelector(state => state.auth)
+  const router = useRouter()
+
+
+
+/*  if (userName && userName.length !== 0) {
+    const {
+      response,
+      isLoading,
+    } = useCreateUser(userName && userName)
+    if (response && response.data.name) {
+      dispatch(setUserName(response.data.name))
+    }
+  }*/
+
+  useEffect(() => {
+    if(!isAuth) window.localStorage.clear()
+
+  }, [ isAuth ])
+
+  /*
+    const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        addMessage()
+      }
+    }
+  */
 
   return (
     <AppBar position='static'>
@@ -53,7 +76,27 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
         >
           <MenuIcon/>
         </IconButton>
-        <Typography variant='h6' component='div' sx={ { flexGrow: 1 } }>
+        <Box
+          sx={ {
+            margin: '10px',
+            cursor: 'pointer'
+          } }
+        >
+          <Link color="inherit" onClick={ () => router.push('/') }>
+            { 'HOME' }
+          </Link>
+        </Box>
+        <Box
+          sx={ {
+            margin: '10px',
+            cursor: 'pointer'
+          } }
+        >
+          <Link color='inherit' onClick={ () => router.push('/supportChat') }>
+            { 'supportChat' }
+          </Link>
+        </Box>
+        <Typography variant='h6' component='div' sx={ { flexGrow: 1, textAlign: 'center' } }>
           Support chat
         </Typography>
         <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
@@ -61,25 +104,22 @@ const Header = ( { handleMenu }: HandleMenuProps ) => {
             <MailIcon/>
           </Badge>
         </IconButton>
-        <Button color='inherit' onClick={() => dispatch(signUpAT())}>Sign Up</Button>
+        { !isAuth
+          ?
+          <div>
+            <Button color='inherit' onClick={ handleOpenSignUp }>Зарегистрироваться</Button>
 {/*
-        <Button color='inherit' onClick={ handleOpen }>Log In</Button>
-        <Modal
-          open={ open }
-          onClose={ handleClose }
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Box sx={ style }>
-            <Typography id='modal-modal-title' variant='h6' component='h2'>
-              Text in a modal
-            </Typography>
-            <Typography id='modal-modal-description' sx={ { mt: 2 } }>
-              <Link href={''}>Тут будет ссылка на телеграмм</Link>
-            </Typography>
-          </Box>
-        </Modal>
+            <Button color='inherit' onClick={ () => dispatch(signUpAT(String(prompt('Введите имя')))) }>Зарегистрироваться</Button>
 */}
+            <Button color='inherit' onClick={ handleOpenLogin }>Войти</Button>
+          </div>
+          :
+          <Button color='inherit' onClick={ () => dispatch(logout()) }>Выйти</Button>
+        }
+
+        <SignupModal open={openSignup} handleClose={handleCloseSignup}/>
+        <LoginModal open={openLogin} handleClose={handleCloseLogin} />
+
       </Toolbar>
     </AppBar>
   )
