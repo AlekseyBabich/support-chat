@@ -1,11 +1,14 @@
 import React from 'react'
 import { Grid, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 
 
 
 
 const UserInfo = () => {
+
+  const { isAuth} = useAppSelector(state => state.auth)
   return (
     <Grid item md={ 3 }>
       <Paper elevation={ 3 }
@@ -25,7 +28,10 @@ const UserInfo = () => {
               user id:
             </li>
             <li>
-              status:
+              status: {
+              isAuth && 'online'
+            }
+
             </li>
           </ul>
         </Box>
