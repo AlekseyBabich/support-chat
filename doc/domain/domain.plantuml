@@ -25,4 +25,39 @@ entity AuthLoginLink {
 }
 AuthLoginLink }o--|| User
 
+entity Chat {
+  chatId: string
+  --
+
+  userId: User
+  name: string
+  createdAt: date
+  deletedAt?: date
+}
+Chat }o--|| User
+
+entity ChatUser {
+  chatId: Chat
+  --
+
+  userId: User
+  createdAt: date
+  deletedAt?: date
+}
+ChatUser }o--|| User
+Chat }o--|| ChatUser
+
+entity ChatMessage {
+  messageId: string
+  --
+
+  chatId: Chat
+  userId: User
+  content: string
+  createdAt: date
+  deletedAt?: date
+}
+ChatMessage }o--|| User
+ChatMessage }o--|| Chat
+
 @enduml
