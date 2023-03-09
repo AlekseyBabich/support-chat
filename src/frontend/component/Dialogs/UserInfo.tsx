@@ -4,11 +4,9 @@ import { Box } from '@mui/system'
 import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 
 
-
-
 const UserInfo = () => {
 
-  const { isAuth} = useAppSelector(state => state.auth)
+  const { isAuth, userName } = useAppSelector(state => state.auth)
   return (
     <Grid item md={ 3 }>
       <Paper elevation={ 3 }
@@ -22,16 +20,12 @@ const UserInfo = () => {
         <Box sx={ { fontSize: '20px' } }>
           <ul>
             <li>
-              user name:
-            </li>
-            <li>
-              user id:
+              user name: { userName }
             </li>
             <li>
               status: {
               isAuth && 'online'
             }
-
             </li>
           </ul>
         </Box>

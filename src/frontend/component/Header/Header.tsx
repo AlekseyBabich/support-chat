@@ -6,20 +6,14 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Badge, Link, Modal, TextField } from '@mui/material'
+import { Badge, Link } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail'
 import { Box } from '@mui/system';
 import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
-import { logout, setUserName, signUpAT } from '../../store/Slice/authSlice'
-import { KeyboardEvent } from 'react'
+import { logout } from '../../store/Slice/authSlice'
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import { authService } from "@src/frontend/services/auth.service";
-import { useCreateUser } from "@src/frontend/store/Hooks/authHooks/useCreateUser";
 import LoginModal from "@component/Header/LoginModal";
 import SignupModal from "@component/Header/SignupModal";
-
-
 
 
 interface HandleMenuProps {
@@ -39,29 +33,10 @@ const Header = ({ handleMenu }: HandleMenuProps) => {
   const router = useRouter()
 
 
-
-/*  if (userName && userName.length !== 0) {
-    const {
-      response,
-      isLoading,
-    } = useCreateUser(userName && userName)
-    if (response && response.data.name) {
-      dispatch(setUserName(response.data.name))
-    }
-  }*/
-
   useEffect(() => {
-    if(!isAuth) window.localStorage.clear()
-
+    if (!isAuth) window.localStorage.clear()
   }, [ isAuth ])
 
-  /*
-    const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        addMessage()
-      }
-    }
-  */
 
   return (
     <AppBar position='static'>
@@ -96,7 +71,7 @@ const Header = ({ handleMenu }: HandleMenuProps) => {
             { 'supportChat' }
           </Link>
         </Box>
-        <Typography variant='h6' component='div' sx={ { flexGrow: 1, textAlign: 'center' } }>
+        <Typography variant='h3' component='div' sx={ { flexGrow: 1, textAlign: 'center' } }>
           Support chat
         </Typography>
         <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
@@ -108,17 +83,14 @@ const Header = ({ handleMenu }: HandleMenuProps) => {
           ?
           <div>
             <Button color='inherit' onClick={ handleOpenSignUp }>Зарегистрироваться</Button>
-{/*
-            <Button color='inherit' onClick={ () => dispatch(signUpAT(String(prompt('Введите имя')))) }>Зарегистрироваться</Button>
-*/}
             <Button color='inherit' onClick={ handleOpenLogin }>Войти</Button>
           </div>
           :
           <Button color='inherit' onClick={ () => dispatch(logout()) }>Выйти</Button>
         }
 
-        <SignupModal open={openSignup} handleClose={handleCloseSignup}/>
-        <LoginModal open={openLogin} handleClose={handleCloseLogin} />
+        <SignupModal open={ openSignup } handleClose={ handleCloseSignup }/>
+        <LoginModal open={ openLogin } handleClose={ handleCloseLogin }/>
 
       </Toolbar>
     </AppBar>

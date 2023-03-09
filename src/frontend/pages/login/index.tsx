@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { useRouter } from "next/router";
 
-const  login = () => {
+const login = () => {
   const router = useRouter();
   const { isAuth } = useAppSelector(state => state.auth)
 
@@ -12,9 +12,9 @@ const  login = () => {
   }
   return (
     <div>
-      {!isAuth &&
-          <Typography variant={'h1'}
-                      sx={{justifyContent: 'center', textAlign: 'center'}}
+      { !isAuth &&
+          <Typography variant={ 'h1' }
+                      sx={ { justifyContent: 'center', textAlign: 'center', mt: '100px' } }
           >
               Вы не зарегестрированы.
           </Typography>

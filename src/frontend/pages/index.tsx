@@ -12,7 +12,7 @@ export default function Home() {
     if (!isAuth) {
       router.push('/login')
     }
-  }, [isAuth])
+  }, [ isAuth ])
 
 
   return (
@@ -21,7 +21,7 @@ export default function Home() {
       <h3>isAuth: { String(isAuth) }</h3>
       <h3>Token: { token ?? 'Сгорели?' }</h3>
       <h3>refreshToken: { refreshToken ?? 'Сгорели?' }</h3>
-      <h3>userName: { String(userName) }</h3>
+      <h3>userName: { userName }</h3>
 
     </>
   )

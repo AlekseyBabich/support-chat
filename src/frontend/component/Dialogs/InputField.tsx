@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 import { Box } from "@mui/system";
 import { Button, TextField } from "@mui/material";
-import { KeyboardEvent } from 'react'
 
 interface InputFieldProps {
   text: string
   addMessage: () => void
   setText: (str: string) => void
 }
-
 
 
 const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) => {
@@ -28,7 +26,7 @@ const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) =>
         fullWidth
         value={ text }
         onChange={ e => setText(e.target.value) }
-        onKeyDown={sendByKey}
+        onKeyDown={ sendByKey }
       />
       <Box>
         <Button variant='contained'

@@ -33,18 +33,18 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
 
   const submitUserName = () => {
     handleClose()
-    if(!userName.trim().length) {
+    if (!userName.trim().length) {
       alert('Имя обязательно!')
       return
     }
 
     authService.loginUser(userName).then((link) => {
-      if(link.data.status_code == 404){
+      if (link.data.status_code == 404) {
         alert('Пользователя с таким именем нет')
         return
       }
 
-      dispatch(setNewUserName({name: userName}))
+      dispatch(setNewUserName({ name: userName }))
       router.push(link.data.body)
     })
 
@@ -53,26 +53,26 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
   return (
     <div>
       <Modal
-          open={ open }
-          onClose={ handleClose }
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Box sx={ style }>
-            <TextField
-              id='outlined-textarea'
-              label='Введите userName'
-              multiline
-              fullWidth
-              value={ userName }
-              onChange={ e => setUserName(e.target.value) }
-            />
-            <Button variant='contained'
-                    sx={ { mt: '10px' } }
-              onClick={ submitUserName }
-            >Отправить</Button>
-          </Box>
-        </Modal>
+        open={ open }
+        onClose={ handleClose }
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={ style }>
+          <TextField
+            id='outlined-textarea'
+            label='Введите userName'
+            multiline
+            fullWidth
+            value={ userName }
+            onChange={ e => setUserName(e.target.value) }
+          />
+          <Button variant='contained'
+                  sx={ { mt: '10px' } }
+                  onClick={ submitUserName }
+          >Отправить</Button>
+        </Box>
+      </Modal>
     </div>
   );
 };

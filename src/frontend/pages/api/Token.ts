@@ -6,7 +6,7 @@ export interface Tokens {
 }
 
 export const getTokens = async (
-    authLoginLinkId: string,
+  authLoginLinkId: string,
 ): Promise<Tokens> => {
   const res = await axios.get<Tokens>('/token', {
     params: {

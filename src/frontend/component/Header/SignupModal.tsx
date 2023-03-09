@@ -31,19 +31,19 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
 
   const submitUserName = () => {
     handleClose()
-    if(!userName.trim().length) {
+    if (!userName.trim().length) {
       alert('Имя обязательно!')
       return
     }
 
     authService.createUser(userName).then((user) => {
-      if(user.data.status_code == 404){
+      if (user.data.status_code == 404) {
         alert('Пользователей с таким именем уже есть!')
         return
       }
 
       authService.loginUser(user.data.name).then((link) => {
-        dispatch(setNewUserName({name: user.data.name}))
+        dispatch(setNewUserName({ name: user.data.name }))
         router.push(link.data.body)
       })
     })
@@ -54,26 +54,26 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
   return (
     <div>
       <Modal
-          open={ open }
-          onClose={ handleClose }
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Box sx={ style }>
-            <TextField
-              id='outlined-textarea'
-              label='Введите userName'
-              multiline
-              fullWidth
-              value={ userName }
-              onChange={ e => setUserName(e.target.value) }
-            />
-            <Button variant='contained'
-                    sx={ { mt: '10px' } }
-              onClick={ submitUserName }
-            >Зарегистрироваться</Button>
-          </Box>
-        </Modal>
+        open={ open }
+        onClose={ handleClose }
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={ style }>
+          <TextField
+            id='outlined-textarea'
+            label='Введите userName'
+            multiline
+            fullWidth
+            value={ userName }
+            onChange={ e => setUserName(e.target.value) }
+          />
+          <Button variant='contained'
+                  sx={ { mt: '10px' } }
+                  onClick={ submitUserName }
+          >Зарегистрироваться</Button>
+        </Box>
+      </Modal>
     </div>
   );
 };

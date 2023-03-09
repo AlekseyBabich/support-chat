@@ -5,8 +5,6 @@ import UserInfo from '@component/Dialogs/UserInfo'
 import { Box } from "@mui/system";
 
 
-
-
 const ChatPage = () => {
   return (
     <Box sx={ { flexGrow: 1 } }>

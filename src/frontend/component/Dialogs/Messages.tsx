@@ -17,7 +17,6 @@ const Messages = () => {
   const [ text, setText ] = useState('')
 
 
-
   const addMessage = () => {
     if (text.trim().length)
       dispatch(sendMessage(text))

@@ -14,7 +14,7 @@ const Chat = () => {
     if (!isAuth) {
       router.push('/login')
     }
-  }, [isAuth])
+  }, [ isAuth ])
 
   return (
     <>
