@@ -26,7 +26,7 @@ entity AuthLoginLink {
 AuthLoginLink }o--|| User
 
 entity Chat {
-  chatId: string
+  id: string
   --
 
   userId: User
@@ -37,9 +37,10 @@ entity Chat {
 Chat }o--|| User
 
 entity ChatUser {
-  chatId: Chat
+  id: string
   --
 
+  chatId: Chat
   userId: User
   createdAt: date
   deletedAt?: date
@@ -48,7 +49,7 @@ ChatUser }o--|| User
 Chat }o--|| ChatUser
 
 entity ChatMessage {
-  messageId: string
+  id: string
   --
 
   chatId: Chat

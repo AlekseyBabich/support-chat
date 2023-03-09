@@ -18,17 +18,17 @@ export interface ChatMessages {
   
   selectById(
     connection: DBConnection,
-    messageId: string
+    id: string
   ): Promise<ChatMessage | undefined>
   
   selectByIds(
     connection: DBConnection,
-    messageIds: string[]
+    ids: string[]
   ): Promise<ChatMessage[]>
   
   selectAll(
     connection: DBConnection,
-    sortField: 'messageId' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'
@@ -47,7 +47,7 @@ export class ChatMessagesImpl implements ChatMessages {
   
   /*
   create table if not exists "ChatMessages" (
-    "messageId" text primary key,
+    "id" text primary key,
     "chatId" text not null,
     "userId" text not null,
     "content" text not null,
@@ -58,7 +58,7 @@ export class ChatMessagesImpl implements ChatMessages {
   
   public static chatMessageRowMapping(row: pg.QueryResultRow): ChatMessage {
     return {
-      messageId: row.messageId,
+      id: row.id,
       chatId: row.chatId,
       userId: row.userId,
       content: row.content,
@@ -69,7 +69,7 @@ export class ChatMessagesImpl implements ChatMessages {
   
   public static chatMessageParamsMapping(chatMessage: Partial<ChatMessage>): any[] {
     const params: any[] = []
-    if (chatMessage.messageId != null) params.push(chatMessage.messageId)
+    if (chatMessage.id != null) params.push(chatMessage.id)
     params.push(
       chatMessage.chatId,
       chatMessage.userId,
@@ -90,7 +90,7 @@ export class ChatMessagesImpl implements ChatMessages {
   ): Promise<ChatMessage> {
     const sql = `
       insert into "ChatMessages" (
-        "messageId",
+        "id",
         "chatId",
         "userId",
         "content",
@@ -120,7 +120,7 @@ export class ChatMessagesImpl implements ChatMessages {
         "content" = $4,
         "createdAt" = $5,
         "deletedAt" = $6
-      where "messageId" = $1
+      where "id" = $1
     `
     
     const params: any[] = ChatMessagesImpl.chatMessageParamsMapping(chatMessage)
@@ -132,13 +132,13 @@ export class ChatMessagesImpl implements ChatMessages {
   
   async selectById(
     connection: DBConnection,
-    messageId: string
+    id: string
   ): Promise<ChatMessage | undefined> {
     const sql = `
-      select * from "ChatMessages" where "messageId" = $1
+      select * from "ChatMessages" where "id" = $1
     `
     
-    const params: any[] = [messageId]
+    const params: any[] = [id]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
@@ -147,13 +147,13 @@ export class ChatMessagesImpl implements ChatMessages {
   
   async selectByIds(
     connection: DBConnection,
-    messageIds: string[]
+    ids: string[]
   ): Promise<ChatMessage[]> {
     const sql = `
-      select * from "ChatMessages" where "messageId" = any($1)
+      select * from "ChatMessages" where "id" = any($1)
     `
     
-    const params: any[] = [messageIds]
+    const params: any[] = [ids]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
@@ -162,7 +162,7 @@ export class ChatMessagesImpl implements ChatMessages {
   
   async selectAll(
     connection: DBConnection,
-    sortField: 'messageId' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'

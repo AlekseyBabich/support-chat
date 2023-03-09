@@ -1,6 +1,6 @@
 
 export type Chat = {
-  chatId: string
+  id: string
   userId: string
   name: string
   createdAt: Date

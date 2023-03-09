@@ -48,7 +48,7 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
   /*
   create table if not exists "AuthLoginLinks" (
     "id" text primary key,
-    "userId" numeric not null,
+    "userId" text not null,
     "createdAt" timestamptz not null,
     "activatedAt" timestamptz,
     "expireAt" timestamptz not null
@@ -58,7 +58,7 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
   public static authLoginLinkRowMapping(row: pg.QueryResultRow): AuthLoginLink {
     return {
       id: row.id,
-      userId: String(row.userId),
+      userId: row.userId,
       createdAt: row.createdAt,
       activatedAt: row.activatedAt,
       expireAt: row.expireAt

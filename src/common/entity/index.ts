@@ -1,5 +1,5 @@
 export * from './AuthLoginLink'
-export * from './User'
 export * from './Chat'
 export * from './ChatMessage'
 export * from './ChatUser'
+export * from './User'

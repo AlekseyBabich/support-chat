@@ -10,22 +10,22 @@ export interface Users {
     connection: DBConnection,
     user: User
   ): Promise<User>
-
+  
   update(
     connection: DBConnection,
     user: User
   ): Promise<number>
-
+  
   selectById(
     connection: DBConnection,
     id: string
   ): Promise<User | undefined>
-
+  
   selectByIds(
     connection: DBConnection,
     ids: string[]
   ): Promise<User[]>
-
+  
   selectAll(
     connection: DBConnection,
     sortField: 'id' | 'name' | 'createdAt' | 'deletedAt',
@@ -44,7 +44,7 @@ export function makeUsers(db: DB): Users {
  */
 export class UsersImpl implements Users {
   constructor(private readonly clientLocator: DBClientLocator) {}
-
+  
   /*
   create table if not exists "Users" (
     "id" text primary key,
@@ -53,7 +53,7 @@ export class UsersImpl implements Users {
     "deletedAt" timestamptz
   )
   */
-
+  
   public static userRowMapping(row: pg.QueryResultRow): User {
     return {
       id: row.id,
@@ -62,7 +62,7 @@ export class UsersImpl implements Users {
       deletedAt: row.deletedAt
     }
   }
-
+  
   public static userParamsMapping(user: Partial<User>): any[] {
     const params: any[] = []
     if (user.id != null) params.push(user.id)
@@ -73,11 +73,11 @@ export class UsersImpl implements Users {
     )
     return params
   }
-
+  
   //
   // Users repository methods implementation
   //
-
+  
   async insert(
     connection: DBConnection,
     user: User
@@ -91,16 +91,16 @@ export class UsersImpl implements Users {
       )
       values ($1, $2, $3, $4)
     `
-
+    
     const params: any[] = UsersImpl.userParamsMapping(user)
-
+    
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return {
       ...user
     }
   }
-
+  
   async update(
     connection: DBConnection,
     user: User
@@ -112,14 +112,14 @@ export class UsersImpl implements Users {
         "deletedAt" = $4
       where "id" = $1
     `
-
+    
     const params: any[] = UsersImpl.userParamsMapping(user)
-
+    
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rowCount
   }
-
+  
   async selectById(
     connection: DBConnection,
     id: string
@@ -127,14 +127,14 @@ export class UsersImpl implements Users {
     const sql = `
       select * from "Users" where "id" = $1
     `
-
+    
     const params: any[] = [id]
-
+    
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(UsersImpl.userRowMapping).shift()
   }
-
+  
   async selectByIds(
     connection: DBConnection,
     ids: string[]
@@ -142,14 +142,14 @@ export class UsersImpl implements Users {
     const sql = `
       select * from "Users" where "id" = any($1)
     `
-
+    
     const params: any[] = [ids]
-
+    
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(UsersImpl.userRowMapping)
   }
-
+  
   async selectAll(
     connection: DBConnection,
     sortField: 'id' | 'name' | 'createdAt' | 'deletedAt',
@@ -163,9 +163,9 @@ export class UsersImpl implements Users {
       ${['asc', 'desc'].includes(sortDirection) ? 'nulls last' : ''}
       limit ${limit} offset ${offset}
     `
-
+    
     const params: any[] = []
-
+    
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(UsersImpl.userRowMapping)

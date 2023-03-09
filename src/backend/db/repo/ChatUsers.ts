@@ -18,17 +18,17 @@ export interface ChatUsers {
   
   selectById(
     connection: DBConnection,
-    chatId: string
+    id: string
   ): Promise<ChatUser | undefined>
   
   selectByIds(
     connection: DBConnection,
-    chatIds: string[]
+    ids: string[]
   ): Promise<ChatUser[]>
   
   selectAll(
     connection: DBConnection,
-    sortField: 'chatId' | 'userId' | 'createdAt' | 'deletedAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'
@@ -47,7 +47,8 @@ export class ChatUsersImpl implements ChatUsers {
   
   /*
   create table if not exists "ChatUsers" (
-    "chatId" text primary key,
+    "id" text primary key,
+    "chatId" text not null,
     "userId" text not null,
     "createdAt" timestamptz not null,
     "deletedAt" timestamptz
@@ -56,6 +57,7 @@ export class ChatUsersImpl implements ChatUsers {
   
   public static chatUserRowMapping(row: pg.QueryResultRow): ChatUser {
     return {
+      id: row.id,
       chatId: row.chatId,
       userId: row.userId,
       createdAt: row.createdAt,
@@ -65,8 +67,9 @@ export class ChatUsersImpl implements ChatUsers {
   
   public static chatUserParamsMapping(chatUser: Partial<ChatUser>): any[] {
     const params: any[] = []
-    if (chatUser.chatId != null) params.push(chatUser.chatId)
+    if (chatUser.id != null) params.push(chatUser.id)
     params.push(
+      chatUser.chatId,
       chatUser.userId,
       chatUser.createdAt,
       chatUser.deletedAt
@@ -84,12 +87,13 @@ export class ChatUsersImpl implements ChatUsers {
   ): Promise<ChatUser> {
     const sql = `
       insert into "ChatUsers" (
+        "id",
         "chatId",
         "userId",
         "createdAt",
         "deletedAt"
       )
-      values ($1, $2, $3, $4)
+      values ($1, $2, $3, $4, $5)
     `
     
     const params: any[] = ChatUsersImpl.chatUserParamsMapping(chatUser)
@@ -107,10 +111,11 @@ export class ChatUsersImpl implements ChatUsers {
   ): Promise<number> {
     const sql = `
       update "ChatUsers" set
-        "userId" = $2,
-        "createdAt" = $3,
-        "deletedAt" = $4
-      where "chatId" = $1
+        "chatId" = $2,
+        "userId" = $3,
+        "createdAt" = $4,
+        "deletedAt" = $5
+      where "id" = $1
     `
     
     const params: any[] = ChatUsersImpl.chatUserParamsMapping(chatUser)
@@ -122,13 +127,13 @@ export class ChatUsersImpl implements ChatUsers {
   
   async selectById(
     connection: DBConnection,
-    chatId: string
+    id: string
   ): Promise<ChatUser | undefined> {
     const sql = `
-      select * from "ChatUsers" where "chatId" = $1
+      select * from "ChatUsers" where "id" = $1
     `
     
-    const params: any[] = [chatId]
+    const params: any[] = [id]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
@@ -137,13 +142,13 @@ export class ChatUsersImpl implements ChatUsers {
   
   async selectByIds(
     connection: DBConnection,
-    chatIds: string[]
+    ids: string[]
   ): Promise<ChatUser[]> {
     const sql = `
-      select * from "ChatUsers" where "chatId" = any($1)
+      select * from "ChatUsers" where "id" = any($1)
     `
     
-    const params: any[] = [chatIds]
+    const params: any[] = [ids]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
@@ -152,7 +157,7 @@ export class ChatUsersImpl implements ChatUsers {
   
   async selectAll(
     connection: DBConnection,
-    sortField: 'chatId' | 'userId' | 'createdAt' | 'deletedAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'
