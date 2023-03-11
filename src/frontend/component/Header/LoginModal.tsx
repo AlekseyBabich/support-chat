@@ -70,6 +70,7 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
       >
         <Box sx={ style }>
           <TextField
+            autoFocus
             id='outlined-textarea'
             label='Введите userName'
             multiline={false}
