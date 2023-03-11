@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, KeyboardEvent } from 'react';
 import { Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
@@ -30,7 +30,6 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
   const router = useRouter()
 
   const submitUserName = () => {
-    handleClose()
     if (!userName.trim().length) {
       alert('Имя обязательно!')
       return
@@ -51,6 +50,16 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
     setUserName('')
   }
 
+  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitUserName()
+    }
+  }
+
+  useEffect(() => {
+    handleClose()
+  },[router.push])
+
   return (
     <div>
       <Modal
@@ -63,14 +72,15 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
           <TextField
             id='outlined-textarea'
             label='Введите userName'
-            multiline
+            multiline={false}
             fullWidth
             value={ userName }
             onChange={ e => setUserName(e.target.value) }
+            onKeyDown={ sendByKey }
           />
           <Button variant='contained'
                   sx={ { mt: '10px' } }
-                  onClick={ submitUserName }
+                  onClick={ () => sendByKey }
           >Зарегистрироваться</Button>
         </Box>
       </Modal>
