@@ -13,6 +13,7 @@ import bodyParser from "koa-bodyparser";
 import { RefreshAccessToken } from "@src/backend/rest/RefreshAccessToken";
 import { Login } from "@src/backend/rest/Login";
 import { CreateChat } from "@src/backend/rest/CreateChat";
+import { AddMessage } from "@src/backend/rest/AddMessage";
 
 const app = new Koa();
 const router = new Router();
@@ -24,6 +25,7 @@ router
     .post("/login", Login())
     .post("/refreshAccessToken", RefreshAccessToken())
     .post("/createChat", CreateChat())
+    .post("/addMessage", AddMessage())
 
 app.use(Cors());
 app.use(json());
