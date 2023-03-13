@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { authService } from "@src/frontend/services/auth.service";
 import { useRouter } from "next/router";
@@ -32,7 +32,6 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
   const router = useRouter()
 
   const submitUserName = () => {
-    handleClose()
     if (!userName.trim().length) {
       alert('Имя обязательно!')
       return
@@ -50,6 +49,17 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
 
     setUserName('')
   }
+
+  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitUserName()
+    }
+  }
+
+  useEffect(() => {
+    handleClose()
+  },[router.push])
+
   return (
     <div>
       <Modal
@@ -60,16 +70,18 @@ const LoginModal = ({ open, handleClose }: LoginModalProps) => {
       >
         <Box sx={ style }>
           <TextField
+            autoFocus
             id='outlined-textarea'
             label='Введите userName'
-            multiline
+            multiline={false}
             fullWidth
             value={ userName }
             onChange={ e => setUserName(e.target.value) }
+            onKeyDown={ sendByKey }
           />
           <Button variant='contained'
                   sx={ { mt: '10px' } }
-                  onClick={ submitUserName }
+                onClick={ () => sendByKey }
           >Отправить</Button>
         </Box>
       </Modal>

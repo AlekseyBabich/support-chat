@@ -22,7 +22,7 @@ const InputField: React.FC<InputFieldProps> = ({ text, addMessage, setText }) =>
       <TextField
         id='outlined-textarea'
         label='Введите сообщение'
-        multiline
+        multiline={false}
         fullWidth
         value={ text }
         onChange={ e => setText(e.target.value) }
