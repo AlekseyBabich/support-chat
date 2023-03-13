@@ -4,6 +4,7 @@ import { Tokens } from "@src/frontend/pages/api/Token";
 export interface AuthState {
   isAuth: boolean
   userName: string | null
+  userId: string | null
   token: string | null
   refreshToken: string | null
   telegramAuthLink: string | null
@@ -14,6 +15,7 @@ export interface AuthState {
 const initialState: AuthState = {
   isAuth: false,
   userName: null,
+  userId: null,
   token: null,
   refreshToken: null,
   telegramAuthLink: null,
@@ -27,6 +29,9 @@ const authSlice = createSlice({
   reducers: {
     setNewUserName: (state, action) => {
       state.userName = action.payload.name
+    },
+    setNewUserId: (state, action) => {
+      state.userId = action.payload.userId
     },
     setTokens: (state, { payload }: { payload: Tokens }) => {
       state.token = payload.accessToken
@@ -47,7 +52,8 @@ const authSlice = createSlice({
 export const {
   setNewUserName,
   setTokens,
-  logout
+  logout,
+  setNewUserId
 
 } = authSlice.actions
 
