@@ -3,8 +3,8 @@ import { Grid, Paper } from '@mui/material'
 import { Box } from '@mui/system'
 import { useAppDispatch } from '../../store/Hooks/hook';
 import { sendMessage } from "@src/frontend/store/Slice/appSlice";
-import ListMessage from "@component/Dialogs/ListMessage";
-import InputField from "@component/Dialogs/InputField";
+import ListMessage from "@component/Chat/ListMessage";
+import InputField from "@component/Chat/InputField";
 
 export interface IMessage {
   id: number
