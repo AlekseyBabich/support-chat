@@ -5,6 +5,7 @@ function backend() {
     return {
         CORS: true,
         baseApiURL: 'http://localhost:5100',
+        jwtSecret: `${process.env.JWT_SECRET}`,
         frontendURL: `${process.env.FRONTEND_URL}`,
         db: {
             host: 'localhost',

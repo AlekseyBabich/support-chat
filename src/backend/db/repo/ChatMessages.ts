@@ -1,124 +1,129 @@
 import * as pg from 'pg'
 import { DB, DBConnection, DBClientLocator } from '@db'
-import { AuthLoginLink } from '@entity'
+import { ChatMessage } from '@entity'
 
 /**
- * AuthLoginLinks repository
+ * ChatMessages repository
  */
-export interface AuthLoginLinks {
+export interface ChatMessages {
   insert(
     connection: DBConnection,
-    authLoginLink: AuthLoginLink
-  ): Promise<AuthLoginLink>
+    chatMessage: ChatMessage
+  ): Promise<ChatMessage>
   
   update(
     connection: DBConnection,
-    authLoginLink: AuthLoginLink
+    chatMessage: ChatMessage
   ): Promise<number>
   
   selectById(
     connection: DBConnection,
     id: string
-  ): Promise<AuthLoginLink | undefined>
+  ): Promise<ChatMessage | undefined>
   
   selectByIds(
     connection: DBConnection,
     ids: string[]
-  ): Promise<AuthLoginLink[]>
+  ): Promise<ChatMessage[]>
   
   selectAll(
     connection: DBConnection,
-    sortField: 'id' | 'userId' | 'createdAt' | 'activatedAt' | 'expireAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'
-  ): Promise<AuthLoginLink[]>
+  ): Promise<ChatMessage[]>
 }
 
-export function makeAuthLoginLinks(db: DB): AuthLoginLinks {
-  return new AuthLoginLinksImpl(db)
+export function makeChatMessages(db: DB): ChatMessages {
+  return new ChatMessagesImpl(db)
 }
 
 /**
- * AuthLoginLinks repository implementation
+ * ChatMessages repository implementation
  */
-export class AuthLoginLinksImpl implements AuthLoginLinks {
+export class ChatMessagesImpl implements ChatMessages {
   constructor(private readonly clientLocator: DBClientLocator) {}
   
   /*
-  create table if not exists "AuthLoginLinks" (
+  create table if not exists "ChatMessages" (
     "id" text primary key,
+    "chatId" text not null,
     "userId" text not null,
+    "content" text not null,
     "createdAt" timestamptz not null,
-    "activatedAt" timestamptz,
-    "expireAt" timestamptz not null
+    "deletedAt" timestamptz
   )
   */
   
-  public static authLoginLinkRowMapping(row: pg.QueryResultRow): AuthLoginLink {
+  public static chatMessageRowMapping(row: pg.QueryResultRow): ChatMessage {
     return {
       id: row.id,
+      chatId: row.chatId,
       userId: row.userId,
+      content: row.content,
       createdAt: row.createdAt,
-      activatedAt: row.activatedAt,
-      expireAt: row.expireAt
+      deletedAt: row.deletedAt
     }
   }
   
-  public static authLoginLinkParamsMapping(authLoginLink: Partial<AuthLoginLink>): any[] {
+  public static chatMessageParamsMapping(chatMessage: Partial<ChatMessage>): any[] {
     const params: any[] = []
-    if (authLoginLink.id != null) params.push(authLoginLink.id)
+    if (chatMessage.id != null) params.push(chatMessage.id)
     params.push(
-      authLoginLink.userId,
-      authLoginLink.createdAt,
-      authLoginLink.activatedAt,
-      authLoginLink.expireAt
+      chatMessage.chatId,
+      chatMessage.userId,
+      chatMessage.content,
+      chatMessage.createdAt,
+      chatMessage.deletedAt
     )
     return params
   }
   
   //
-  // AuthLoginLinks repository methods implementation
+  // ChatMessages repository methods implementation
   //
   
   async insert(
     connection: DBConnection,
-    authLoginLink: AuthLoginLink
-  ): Promise<AuthLoginLink> {
+    chatMessage: ChatMessage
+  ): Promise<ChatMessage> {
     const sql = `
-      insert into "AuthLoginLinks" (
+      insert into "ChatMessages" (
         "id",
+        "chatId",
         "userId",
+        "content",
         "createdAt",
-        "activatedAt",
-        "expireAt"
+        "deletedAt"
       )
-      values ($1, $2, $3, $4, $5)
+      values ($1, $2, $3, $4, $5, $6)
     `
     
-    const params: any[] = AuthLoginLinksImpl.authLoginLinkParamsMapping(authLoginLink)
+    const params: any[] = ChatMessagesImpl.chatMessageParamsMapping(chatMessage)
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return {
-      ...authLoginLink
+      ...chatMessage
     }
   }
   
   async update(
     connection: DBConnection,
-    authLoginLink: AuthLoginLink
+    chatMessage: ChatMessage
   ): Promise<number> {
     const sql = `
-      update "AuthLoginLinks" set
-        "userId" = $2,
-        "createdAt" = $3,
-        "activatedAt" = $4,
-        "expireAt" = $5
+      update "ChatMessages" set
+        "chatId" = $2,
+        "userId" = $3,
+        "content" = $4,
+        "createdAt" = $5,
+        "deletedAt" = $6
       where "id" = $1
     `
     
-    const params: any[] = AuthLoginLinksImpl.authLoginLinkParamsMapping(authLoginLink)
+    const params: any[] = ChatMessagesImpl.chatMessageParamsMapping(chatMessage)
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
@@ -128,42 +133,42 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
   async selectById(
     connection: DBConnection,
     id: string
-  ): Promise<AuthLoginLink | undefined> {
+  ): Promise<ChatMessage | undefined> {
     const sql = `
-      select * from "AuthLoginLinks" where "id" = $1
+      select * from "ChatMessages" where "id" = $1
     `
     
     const params: any[] = [id]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
-    return res.rows.map(AuthLoginLinksImpl.authLoginLinkRowMapping).shift()
+    return res.rows.map(ChatMessagesImpl.chatMessageRowMapping).shift()
   }
   
   async selectByIds(
     connection: DBConnection,
     ids: string[]
-  ): Promise<AuthLoginLink[]> {
+  ): Promise<ChatMessage[]> {
     const sql = `
-      select * from "AuthLoginLinks" where "id" = any($1)
+      select * from "ChatMessages" where "id" = any($1)
     `
     
     const params: any[] = [ids]
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
-    return res.rows.map(AuthLoginLinksImpl.authLoginLinkRowMapping)
+    return res.rows.map(ChatMessagesImpl.chatMessageRowMapping)
   }
   
   async selectAll(
     connection: DBConnection,
-    sortField: 'id' | 'userId' | 'createdAt' | 'activatedAt' | 'expireAt',
+    sortField: 'id' | 'chatId' | 'userId' | 'content' | 'createdAt' | 'deletedAt',
     sortDirection: 'asc' | 'desc' | 'asc nulls first' | 'desc nulls first',
     offset: number,
     limit: number | 'all'
-  ): Promise<AuthLoginLink[]> {
+  ): Promise<ChatMessage[]> {
     const sql = `
-      select * from "AuthLoginLinks"
+      select * from "ChatMessages"
       order by "${sortField}" ${sortDirection}
       ${['asc', 'desc'].includes(sortDirection) ? 'nulls last' : ''}
       limit ${limit} offset ${offset}
@@ -173,6 +178,6 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
     
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
-    return res.rows.map(AuthLoginLinksImpl.authLoginLinkRowMapping)
+    return res.rows.map(ChatMessagesImpl.chatMessageRowMapping)
   }
 }
