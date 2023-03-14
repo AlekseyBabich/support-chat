@@ -37,7 +37,6 @@ const SignupModal = ({ open, handleClose }: IModalProps) => {
     authService.createUser(userName).then((user) => {
       if (user.data.status_code == 404) {
         alert('Пользователей с таким именем уже есть!')
-        return
       }
       dispatch(setNewUserId({ userId: user.data.id }))
 

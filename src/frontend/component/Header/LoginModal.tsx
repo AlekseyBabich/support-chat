@@ -31,13 +31,15 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
   const submitUserName = () => {
     if (!userName.trim().length) {
       alert('Имя обязательно!')
-      return
     }
+
+    //todo
+    //- обработать ошибку 404
 
     authService.loginUser(userName).then((link) => {
       if (link.data.status_code == 404) {
+        router.push('/login')
         alert('Пользователя с таким именем нет')
-        return
       }
 
       dispatch(setNewUserName({ name: userName }))
@@ -78,8 +80,8 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
           />
           <Button variant='contained'
                   sx={ { mt: '10px' } }
-                onClick={ () => sendByKey }
-          >Отправить</Button>
+                onClick={ submitUserName }
+          >Войти</Button>
         </Box>
       </Modal>
     </div>
