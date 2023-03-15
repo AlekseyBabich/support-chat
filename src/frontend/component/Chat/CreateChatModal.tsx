@@ -3,8 +3,9 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import { authService } from "@src/frontend/services/auth.service";
 import { useRouter } from "next/router";
 import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
-import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { IModalProps } from "@src/frontend/types";
+import { chatService } from "@src/frontend/services/chat.service";
 
 
 const style = {
@@ -22,42 +23,36 @@ const style = {
 };
 
 
-const LoginModal = ({ open, handleClose }: IModalProps) => {
+const CreateChatModal = ({ open, handleClose }: IModalProps) => {
+
+  const [ chatName, setChatName ] = useState('')
   const [ userName, setUserName ] = useState('')
 
+  const { userId } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  const submitUserName = () => {
-    if (!userName.trim().length) {
-      alert('Имя обязательно!')
+  const sendCreateChat = () => {
+
+    if (!chatName.trim().length) {
+      alert('chatName обязательно!')
+      return
     }
+    if (!userName.trim().length) {
+      alert('userName обязательно!')
+      return
+    }
+    chatService.createChat(chatName, userName, userId).then((data) => {
 
-    //todo
-    //- обработать ошибку 404
+      console.log(data)
 
-    authService.loginUser(userName).then((link) => {
-      if (link.data.status_code == 404) {
-        router.push('/login')
-        alert('Пользователя с таким именем нет')
-      }
+        return
+      })
 
-      dispatch(setNewUserName({ name: userName }))
-      router.push(link.data.body)
-    })
 
+    setChatName('')
     setUserName('')
   }
-
-  const sendByKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      submitUserName()
-    }
-  }
-
-  useEffect(() => {
-    handleClose()
-  },[router.push])
 
   return (
     <div>
@@ -71,21 +66,31 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
           <TextField
             autoFocus
             id='outlined-textarea'
-            label='Введите userName'
+            label='Введите Chat Name'
+            multiline={false}
+            fullWidth
+            value={ chatName }
+            onChange={ e => setChatName(e.target.value) }
+          />
+
+          <TextField sx={{ mt: '20px' }}
+            id='outlined-textarea'
+            label='Введи userName друга'
             multiline={false}
             fullWidth
             value={ userName }
             onChange={ e => setUserName(e.target.value) }
-            onKeyDown={ sendByKey }
           />
+
           <Button variant='contained'
-                  sx={ { mt: '10px' } }
-                onClick={ submitUserName }
-          >Войти</Button>
+                  sx={ { mt: '20px' } }
+                  onClick={ sendCreateChat }
+          >Создать чат</Button>
+
         </Box>
       </Modal>
     </div>
   );
 };
 
-export default LoginModal;
+export default CreateChatModal;

@@ -5,7 +5,7 @@ import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 
 export default function Home() {
-  const { isAuth, token, refreshToken, userName } = useAppSelector(state => state.auth)
+  const { isAuth, token, refreshToken, userName, userId } = useAppSelector(state => state.auth)
   const router = useRouter()
 
 
@@ -65,6 +65,12 @@ export default function Home() {
                         component={ 'div' }
             >
               refreshToken: { refreshToken ?? 'Сгорели?' }
+            </Typography>
+            <Typography sx={ { m: '10px', mt: '30px' } }
+                        variant={ 'h6' }
+                        component={ 'div' }
+            >
+              userId: { userId ?? 'Сгорели?' }
             </Typography>
           </Paper>
         </Box>

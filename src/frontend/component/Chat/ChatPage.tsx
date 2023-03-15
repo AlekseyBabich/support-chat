@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Grid } from '@mui/material'
-import Messages from '@component/Dialogs/Messages'
-import UserInfo from '@component/Dialogs/UserInfo'
+import Messages from '@component/Chat/Messages'
+import ChatList from '@component/Chat/ChatList'
 import { Box } from "@mui/system";
 
 
@@ -12,7 +12,7 @@ const ChatPage = () => {
             justifyContent={ 'center' }
             sx={ { margin: '0 auto', width: '1000px' } }
       >
-        <UserInfo/>
+        <ChatList/>
         <Messages/>
       </Grid>
     </Box>

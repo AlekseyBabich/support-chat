@@ -1,5 +1,5 @@
 import * as React from 'react'
-import ChatPage from "@component/Dialogs/ChatPage";
+import ChatPage from "@component/Chat/ChatPage";
 import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { useEffect } from "react";
 import { useRouter } from "next/router";

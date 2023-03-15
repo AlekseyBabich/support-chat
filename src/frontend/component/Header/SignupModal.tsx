@@ -2,11 +2,11 @@ import React, { useEffect, useState, KeyboardEvent } from 'react';
 import { Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
-import { LoginModalProps } from "@component/Header/LoginModal";
 import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
 import { authService } from "@src/frontend/services/auth.service";
 import { useRouter } from "next/router";
-import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
+import { setNewUserId, setNewUserName } from "@src/frontend/store/Slice/authSlice";
+import { IModalProps } from "@src/frontend/types";
 
 
 const style = {
@@ -23,7 +23,7 @@ const style = {
   p: 4,
 };
 
-const SignupModal = ({ open, handleClose }: LoginModalProps) => {
+const SignupModal = ({ open, handleClose }: IModalProps) => {
   const [ userName, setUserName ] = useState('')
 
   const dispatch = useAppDispatch()
@@ -32,14 +32,13 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
   const submitUserName = () => {
     if (!userName.trim().length) {
       alert('Имя обязательно!')
-      return
     }
 
     authService.createUser(userName).then((user) => {
       if (user.data.status_code == 404) {
         alert('Пользователей с таким именем уже есть!')
-        return
       }
+      dispatch(setNewUserId({ userId: user.data.id }))
 
       authService.loginUser(user.data.name).then((link) => {
         dispatch(setNewUserName({ name: user.data.name }))
@@ -81,7 +80,7 @@ const SignupModal = ({ open, handleClose }: LoginModalProps) => {
           />
           <Button variant='contained'
                   sx={ { mt: '10px' } }
-                  onClick={ () => sendByKey }
+                  onClick={ submitUserName }
           >Зарегистрироваться</Button>
         </Box>
       </Modal>
