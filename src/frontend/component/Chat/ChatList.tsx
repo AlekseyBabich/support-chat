@@ -18,7 +18,7 @@ const ChatList = () => {
   return (
     <Grid item md={ 3 }>
       <Paper elevation={ 3 }
-             sx={ { height: '720px' } }
+             sx={ { height: '720px', justifyContent: 'center' } }
       >
           <Button variant='contained'
                   sx={ { ml: '50px', mt: '15px' } }
@@ -30,9 +30,9 @@ const ChatList = () => {
                  sx={{ mt: '15px' }}
         />
         <Button variant='contained'
-                sx={ { ml: '50px', mt: '15px' } }
+                sx={ { m: '15px' } }
         >
-          Создать чат
+          Тут будут списки чатов
         </Button>
 
         <CreateChatModal open={ openCreateChat } handleClose={ handleCloseCreateChat }/>
