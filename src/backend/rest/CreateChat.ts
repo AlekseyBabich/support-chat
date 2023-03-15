@@ -62,6 +62,16 @@ export function CreateChat(){
         return 'error'
       }
 
+      console.log(data.id)
+      console.log(body.createUserId)
+      if (data.id ==  body.createUserId){
+        ctx.body = {
+          body: 'createUserId and UserName should not belong to the same user',
+          status_code: ctx.status
+        }
+        return 'error'
+      }
+
       const createUser = await users.selectById(con, body.createUserId)
 
       if(!createUser){
