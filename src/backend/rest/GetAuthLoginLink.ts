@@ -14,6 +14,7 @@ const users = makeUsers(db)
 interface AuthLoginLink{
     userId: string;
 }
+
 export function GetAuthLoginLink(){
     return async (ctx: ExtendableContext) => {
         const body = <AuthLoginLink>ctx.request.body;

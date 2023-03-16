@@ -15,6 +15,7 @@ import { Login } from "@src/backend/rest/Login";
 import { CreateChat } from "@src/backend/rest/CreateChat";
 import { AddMessage } from "@src/backend/rest/AddMessage";
 import { GetAllUsers } from "@src/backend/rest/GetAllUsers";
+import { GetListChats } from "@src/backend/rest/GetListChats";
 
 const app = new Koa();
 const router = new Router();
@@ -22,6 +23,7 @@ const router = new Router();
 router
     .get("/token", GetToken())
     .get("/allUsers", GetAllUsers())
+    .get("/listChats", GetListChats())
     .post("/getAuthLoginLink", GetAuthLoginLink())
     .post("/signUp", SignUp())
     .post("/login", Login())
