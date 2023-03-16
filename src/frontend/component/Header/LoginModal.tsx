@@ -2,7 +2,7 @@ import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { authService } from "@src/frontend/services/auth.service";
 import { useRouter } from "next/router";
-import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
+import { setNewUserId, setNewUserName } from "@src/frontend/store/Slice/authSlice";
 import { useAppDispatch } from "@src/frontend/store/Hooks/hook";
 import { IModalProps } from "@src/frontend/types";
 
@@ -43,6 +43,7 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
       }
 
       dispatch(setNewUserName({ name: userName }))
+      dispatch(setNewUserId({ userId: link.data.userId }))
       router.push(link.data.body)
     })
 

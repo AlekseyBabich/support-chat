@@ -1,9 +1,6 @@
-import React, { KeyboardEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Modal, TextField } from "@mui/material";
-import { authService } from "@src/frontend/services/auth.service";
-import { useRouter } from "next/router";
-import { setNewUserName } from "@src/frontend/store/Slice/authSlice";
-import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
+import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { IModalProps } from "@src/frontend/types";
 import { chatService } from "@src/frontend/services/chat.service";
 
@@ -28,9 +25,7 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
   const [ chatName, setChatName ] = useState('')
   const [ userName, setUserName ] = useState('')
 
-  const { userId } = useAppSelector(state => state.auth)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const createUserId = useAppSelector(state => state.auth.userId)
 
   const sendCreateChat = () => {
 
@@ -42,10 +37,7 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
       alert('userName обязательно!')
       return
     }
-    chatService.createChat(chatName, userName, userId).then((data) => {
-
-      console.log(data)
-
+    chatService.createChat(chatName, userName, createUserId).then((data) => {
         return
       })
 
