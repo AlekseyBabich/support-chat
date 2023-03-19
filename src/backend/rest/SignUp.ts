@@ -28,11 +28,7 @@ export function SignUp(){
         }
 
         await db.withTransaction( async (con) => {
-            const { data } = await supabase
-              .from('Users')
-              .select()
-              .eq('name', body.userName)
-              .single()
+            const data = await users.selectByUserName(con, body.userName)
 
             if(data){
                 ctx.body = {

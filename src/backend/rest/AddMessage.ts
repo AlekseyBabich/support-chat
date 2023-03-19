@@ -2,15 +2,15 @@ import {ExtendableContext} from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
-import { makeChatMessages, makeChats } from "@db/repo";
+import { makeChatMessages, makeChats, makeChatUsers } from "@db/repo";
 import {v4 as uuid} from "@lukeed/uuid/secure";
-import { createClient } from "@supabase/supabase-js";
+
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const chatMessages = makeChatMessages(db)
 const chats = makeChats(db)
-const supabase = createClient(backend.db.supabaseUrl, backend.db.serviseRoleKey)
+const chatUsers = makeChatUsers(db)
 
 interface AddMessage{
   chatId: string;
@@ -56,14 +56,8 @@ export function AddMessage(){
         return 'error';
       }
 
-      const { data, error } = await supabase
-        .from('ChatUsers')
-        .select()
-        .eq('chatId', body.chatId)
-        .eq('userId', body.userId)
-        .single()
-
-      if(error){
+      const data = await chatUsers.selectByChatIdUserId(con, body.chatId, body.userId)
+      if(!data){
         ctx.body = ({
           body: 'no user with this id in this chat',
           status_code: ctx.status
