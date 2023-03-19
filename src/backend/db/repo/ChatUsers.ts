@@ -30,6 +30,12 @@ export interface ChatUsers {
     connection: DBConnection,
     userId: string
   ): Promise<ListChats[]>
+
+  selectByChatIdUserId(
+    connection: DBConnection,
+    chatId: string,
+    userId: string
+  ): Promise<ChatUser | undefined>
   
   selectAll(
     connection: DBConnection,
@@ -161,6 +167,25 @@ export class ChatUsersImpl implements ChatUsers {
     
     const params: any[] = [id]
     
+    const client = await this.clientLocator.ensureClient(connection)
+    const res = await client.query(sql, params)
+    return res.rows.map(ChatUsersImpl.chatUserRowMapping).shift()
+  }
+
+  async selectByChatIdUserId(
+    connection: DBConnection,
+    chatId: string,
+    userId: string
+  ): Promise<ChatUser | undefined> {
+    const sql = `
+        select *
+        from "ChatUsers"
+        where "chatId" = $1
+          and "userId" = $2
+    `
+
+    const params: any[] = [chatId, userId]
+
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(ChatUsersImpl.chatUserRowMapping).shift()
