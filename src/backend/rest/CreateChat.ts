@@ -4,14 +4,12 @@ import backend from "@config/backend";
 import {makeDB} from "@db";
 import { makeChats, makeChatUsers, makeUsers } from "@db/repo";
 import {v4 as uuid} from "@lukeed/uuid/secure";
-import { createClient } from "@supabase/supabase-js";
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const chats = makeChats(db)
 const chatUsers = makeChatUsers(db)
 const users = makeUsers(db)
-const supabase = createClient(backend.db.supabaseUrl, backend.db.serviseRoleKey)
 
 interface CreateChat{
   createUserId: string;
@@ -48,13 +46,9 @@ export function CreateChat(){
     }
 
     await db.withTransaction( async (con) => {
-      const { data, error } = await supabase
-        .from('Users')
-        .select()
-        .eq('name', body.userName)
-        .single()
+      const data = await users.selectByUserName(con, body.userName)
 
-      if(error){
+      if(!data){
         ctx.body = {
           body: 'no user with this userName',
           status_code: ctx.status
@@ -62,8 +56,6 @@ export function CreateChat(){
         return 'error'
       }
 
-      console.log(data.id)
-      console.log(body.createUserId)
       if (data.id ==  body.createUserId){
         ctx.body = {
           body: 'createUserId and UserName should not belong to the same user',

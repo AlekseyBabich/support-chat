@@ -20,6 +20,11 @@ export interface Users {
     connection: DBConnection,
     id: string
   ): Promise<User | undefined>
+
+  selectByUserName(
+    connection: DBConnection,
+    name: string
+  ): Promise<User | undefined>
   
   selectByIds(
     connection: DBConnection,
@@ -130,6 +135,21 @@ export class UsersImpl implements Users {
     
     const params: any[] = [id]
     
+    const client = await this.clientLocator.ensureClient(connection)
+    const res = await client.query(sql, params)
+    return res.rows.map(UsersImpl.userRowMapping).shift()
+  }
+
+  async selectByUserName(
+    connection: DBConnection,
+    name: string
+  ): Promise<User | undefined> {
+    const sql = `
+      select * from "Users" where "name" = $1
+    `
+
+    const params: any[] = [name]
+
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(UsersImpl.userRowMapping).shift()
