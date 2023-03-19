@@ -3,12 +3,10 @@ import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
 import {makeAuthLoginLinks} from "@db/repo";
-import {createClient} from "@supabase/supabase-js";
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const authLoginLinks = makeAuthLoginLinks(db)
-const supabase = createClient(backend.db.supabaseUrl, backend.db.serviseRoleKey)
 
 export function GetToken(){
     return async (ctx: ExtendableContext) => {
@@ -60,10 +58,7 @@ export function GetToken(){
                 refreshToken: data.refresh_token
             }
 
-            await supabase
-              .from('AuthLoginLinks')
-              .update({ activatedAt: new Date()})
-              .eq('id', authLoginLinkId)
+            await authLoginLinks.activateLink(con, authLoginLinkId, new Date())
 
             return 'ok'
         })

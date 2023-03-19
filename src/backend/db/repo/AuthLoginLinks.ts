@@ -15,6 +15,12 @@ export interface AuthLoginLinks {
     connection: DBConnection,
     authLoginLink: AuthLoginLink
   ): Promise<number>
+
+  activateLink(
+    connection: DBConnection,
+    id: string,
+    date: Date
+  ): Promise<AuthLoginLink | undefined>
   
   selectById(
     connection: DBConnection,
@@ -123,6 +129,24 @@ export class AuthLoginLinksImpl implements AuthLoginLinks {
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rowCount
+  }
+
+  async activateLink(
+    connection: DBConnection,
+    id: string,
+    date: Date
+  ): Promise<AuthLoginLink | undefined> {
+    const sql = `
+      update "AuthLoginLinks" set
+        "activatedAt" = $2
+      where "id" = $1
+    `
+
+    const params: any[] = [id, date]
+
+    const client = await this.clientLocator.ensureClient(connection)
+    const res = await client.query(sql, params)
+    return res.rows.map(AuthLoginLinksImpl.authLoginLinkRowMapping).shift()
   }
   
   async selectById(
