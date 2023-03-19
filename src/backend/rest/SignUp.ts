@@ -46,7 +46,7 @@ export function SignUp(){
             await supabase.auth.admin.createUser({
                 email: `user-${userId}@email.com`,
                 password: `user-${userId}pas`,
-                user_metadata: { chat_user: `user:${userId}` },
+                user_metadata: { chat_user_id: `${userId}` },
                 email_confirm: true,
             })
 

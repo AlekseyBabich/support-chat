@@ -2,13 +2,12 @@ import {ExtendableContext} from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
-import { makeUsers } from "@db/repo";
-import { createClient } from "@supabase/supabase-js";
+import { makeChatUsers, makeUsers } from "@db/repo";
 
 const dbPool = new Pool(backend.db)
 const db = makeDB(dbPool)
 const users = makeUsers(db)
-const supabase = createClient(backend.db.supabaseUrl, backend.db.serviseRoleKey)
+const chatUsers = makeChatUsers(db)
 
 
 export function GetListChats() {
@@ -33,12 +32,7 @@ export function GetListChats() {
         return 'error'
       }
 
-      const { data } = await supabase
-        .from('ChatUsers')
-        .select()
-        .eq('userId', userId)
-
-      ctx.body = data
+      ctx.body = await chatUsers.selectByUserId(con, userId)
       return 'ok'
     })
     return

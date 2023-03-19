@@ -1,6 +1,6 @@
 import * as pg from 'pg'
 import { DB, DBConnection, DBClientLocator } from '@db'
-import { ChatUser } from '@entity'
+import { ChatUser, ListChats } from '@entity'
 
 /**
  * ChatUsers repository
@@ -25,6 +25,11 @@ export interface ChatUsers {
     connection: DBConnection,
     ids: string[]
   ): Promise<ChatUser[]>
+
+  selectByUserId(
+    connection: DBConnection,
+    userId: string
+  ): Promise<ListChats[]>
   
   selectAll(
     connection: DBConnection,
@@ -64,7 +69,28 @@ export class ChatUsersImpl implements ChatUsers {
       deletedAt: row.deletedAt
     }
   }
-  
+
+  public static chatUserJoinUserIdMapping(row: pg.QueryResultRow): ListChats {
+    return {
+      id: row.chatUserId,
+      chat: {
+        id: row.chatId,
+        createUserId: row.createUserId,
+        name: row.chatName,
+        createdAt: row.chatCreatedAt,
+        deletedAt: row.chatDeletedAt
+      },
+      user: {
+        id: row.userId,
+        name: row.userName,
+        createdAt: row.userCreatedAt,
+        deletedAt: row.userDeletedAt
+      },
+      createdAt: row.cuCreatedAt,
+      deletedAt: row.cuDeletedAt
+    }
+  }
+
   public static chatUserParamsMapping(chatUser: Partial<ChatUser>): any[] {
     const params: any[] = []
     if (chatUser.id != null) params.push(chatUser.id)
@@ -153,6 +179,39 @@ export class ChatUsersImpl implements ChatUsers {
     const client = await this.clientLocator.ensureClient(connection)
     const res = await client.query(sql, params)
     return res.rows.map(ChatUsersImpl.chatUserRowMapping)
+  }
+
+  async selectByUserId(
+    connection: DBConnection,
+    userId: string
+  ): Promise<ListChats[]> {
+    const sql = `
+        select
+            cu.id as "chatUserId",
+            cu."createdAt" as "cuCreatedAt",
+            cu."deletedAt" as "cuDeletedAt",
+            t.id as "chatId",
+            t."userId" as "createUserId",
+            t.name as "chatName",
+            t."createdAt" as "chatCreatedAt",
+            t."deletedAt" as "chatDeletedAt",
+            u.id as "userId",
+            u.name as "userName",
+            u."createdAt" as "userCreatedAt",
+            u."deletedAt" as "userDeletedAt"
+
+        from "ChatUsers" as cu
+        join "Chats" as t on t."id" = cu."chatId"
+        join "Users" as u on u."id" = cu."userId"
+        where cu."userId" = $1
+    `
+
+    const params: any[] = [userId]
+
+    const client = await this.clientLocator.ensureClient(connection)
+    const res = await client.query(sql, params)
+
+    return res.rows.map(ChatUsersImpl.chatUserJoinUserIdMapping)
   }
   
   async selectAll(
