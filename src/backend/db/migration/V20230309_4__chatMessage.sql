@@ -5,4 +5,6 @@ create table if not exists "ChatMessages" (
     "content" text not null,
     "createdAt" timestamptz not null,
     "deletedAt" timestamptz
-)
+);
+
+alter table "ChatMessages" enable row level security;
