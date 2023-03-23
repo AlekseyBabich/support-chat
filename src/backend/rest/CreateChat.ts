@@ -1,4 +1,4 @@
-import {ExtendableContext} from "koa";
+import { DefaultState, ExtendableContext } from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
@@ -12,26 +12,18 @@ const chatUsers = makeChatUsers(db)
 const users = makeUsers(db)
 
 interface CreateChat{
-  createUserId: string;
   userName: string
   chatName: string;
 }
 
 export function CreateChat(){
-  return async (ctx: ExtendableContext) => {
+  return async (ctx: ExtendableContext & {state: DefaultState}) => {
     const body = <CreateChat>ctx.request.body;
+    const createUserId = ctx.state.user.user_metadata.chat_user_id
 
     if(!body.chatName){
       ctx.body = ({
         body: 'no chatName',
-        status_code: ctx.status
-      });
-      return 'error';
-    }
-
-    if(!body.createUserId){
-      ctx.body = ({
-        body: 'no createUserId',
         status_code: ctx.status
       });
       return 'error';
@@ -56,7 +48,7 @@ export function CreateChat(){
         return 'error'
       }
 
-      if (data.id ==  body.createUserId){
+      if (data.id ==  createUserId){
         ctx.body = {
           body: 'createUserId and UserName should not belong to the same user',
           status_code: ctx.status
@@ -64,19 +56,9 @@ export function CreateChat(){
         return 'error'
       }
 
-      const createUser = await users.selectById(con, body.createUserId)
-
-      if(!createUser){
-        ctx.body = ({
-          body: 'no create user with this id',
-          status_code: ctx.status
-        });
-        return 'error';
-      }
-
       const chat = await chats.insert(con, {
         id: uuid(),
-        userId: body.createUserId,
+        userId: createUserId,
         name: body.chatName,
         createdAt: new Date()
       })
@@ -84,7 +66,7 @@ export function CreateChat(){
       await chatUsers.insert(con, {
         id: uuid(),
         chatId: chat.id,
-        userId: body.createUserId,
+        userId: createUserId,
         createdAt: new Date()
       })
 

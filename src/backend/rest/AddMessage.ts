@@ -1,4 +1,4 @@
-import {ExtendableContext} from "koa";
+import { DefaultState, ExtendableContext } from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
@@ -14,25 +14,17 @@ const chatUsers = makeChatUsers(db)
 
 interface AddMessage{
   chatId: string;
-  userId: string
   content: string;
 }
 
 export function AddMessage(){
-  return async (ctx: ExtendableContext) => {
+  return async (ctx: ExtendableContext  & {state: DefaultState}) => {
     const body = <AddMessage>ctx.request.body;
+    const userId = ctx.state.user.user_metadata.chat_user_id
 
     if(!body.chatId){
       ctx.body = ({
         body: 'no chatId',
-        status_code: ctx.status
-      });
-      return 'error';
-    }
-
-    if(!body.userId){
-      ctx.body = ({
-        body: 'no userId',
         status_code: ctx.status
       });
       return 'error';
@@ -56,7 +48,7 @@ export function AddMessage(){
         return 'error';
       }
 
-      const data = await chatUsers.selectByChatIdUserId(con, body.chatId, body.userId)
+      const data = await chatUsers.selectByChatIdUserId(con, body.chatId, userId)
       if(!data){
         ctx.body = ({
           body: 'no user with this id in this chat',
@@ -68,7 +60,7 @@ export function AddMessage(){
       ctx.body = await chatMessages.insert(con, {
         id: uuid(),
         chatId: body.chatId,
-        userId: body.userId,
+        userId: userId,
         content: body.content,
         createdAt: new Date()
       })
