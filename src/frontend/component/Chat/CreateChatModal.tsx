@@ -105,7 +105,7 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
                 onChange={ handleChange }
               >
                 { allUsers.map(user =>
-                  <MenuItem>
+                  <MenuItem value={user.name}>
                     { user.name }
                   </MenuItem>
                 )}
