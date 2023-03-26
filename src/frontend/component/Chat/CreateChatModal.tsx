@@ -34,7 +34,6 @@ const style = {
 const CreateChatModal = ({ open, handleClose }: IModalProps) => {
 
   const dispatch = useAppDispatch()
-  const createUserId = useAppSelector(state => state.auth.userId)
   const { allUsers } = useAppSelector(state => state.chat)
 
   const [ chatName, setChatName ] = useState('')
@@ -56,11 +55,18 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
       return
     }
 
-    chatService.createChat(chatName, userName, createUserId).then((data) => {
+    chatService.createChat(chatName, userName).then((data) => {
+      if (data.data.status_code == 404) {
+        alert('createUserId and UserName should not belong to the same user')
+        setChatName('')
+        setUserName('')
+        return;
+      }
+
       chatService.getListChats().then(res => {
         dispatch(setListChats(res.data))
-        return
       })
+
       setChatName('')
       setUserName('')
       handleClose()
