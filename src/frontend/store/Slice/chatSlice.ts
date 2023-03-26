@@ -19,11 +19,11 @@ const chatSlice = createSlice({
     setListChats(state, action) {
       state.listChats = action.payload
     },
-    setCurrentChat(state, action) {
+    setCurrentChatId(state, action) {
       state.currentChatId = action.payload
     },
   }
 })
 
-export const { setListChats, setCurrentChat } = chatSlice.actions
+export const { setListChats, setCurrentChatId } = chatSlice.actions
 export default chatSlice.reducer

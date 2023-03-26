@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import Button from "@mui/material/Button";
 import CreateChatModal from "@component/Chat/CreateChatModal";
 import { chatService } from "@src/frontend/services/chat.service";
-import { setListChats } from "@src/frontend/store/Slice/chatSlice";
+import { setCurrentChatId, setListChats } from "@src/frontend/store/Slice/chatSlice";
 
 
 const ChatList = () => {
@@ -17,6 +17,10 @@ const ChatList = () => {
   const [ openCreateChat, setOpenCreateChat ] = useState(false);
   const handleOpenCreateChat = () => setOpenCreateChat(true);
   const handleCloseCreateChat = () => setOpenCreateChat(false);
+
+  const currentChat = (id: string) => {
+    dispatch(setCurrentChatId(id))
+  }
 
   useEffect(() => {
     chatService.getListChats().then(res => {
@@ -47,6 +51,7 @@ const ChatList = () => {
               key={ chat.id }
               elevation={ 3 }
               sx={ { m: '10px', p: '10px', display: 'flex', justifyContent: 'center', cursor: 'pointer' } }
+              onClick={() => currentChat(chat.id)}
             >
               { chat.chat.name }
             </Paper>
