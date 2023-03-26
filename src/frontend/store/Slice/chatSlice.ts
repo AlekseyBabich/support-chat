@@ -4,12 +4,12 @@ import { ListChats } from "@entity";
 
 type ListChatsState = {
   listChats: ListChats[]
-  actualChat: string | null
+  currentChatId: string | null
 }
 
 const initialState: ListChatsState = {
   listChats: [],
-  actualChat: null
+  currentChatId: null
 }
 
 const chatSlice = createSlice({
@@ -18,9 +18,12 @@ const chatSlice = createSlice({
   reducers: {
     setListChats(state, action) {
       state.listChats = action.payload
-    }
+    },
+    setCurrentChat(state, action) {
+      state.currentChatId = action.payload
+    },
   }
 })
 
-export const { setListChats } = chatSlice.actions
+export const { setListChats, setCurrentChat } = chatSlice.actions
 export default chatSlice.reducer

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Divider, Grid, Paper, Typography } from '@mui/material'
+import { Divider, Grid, Paper } from '@mui/material'
 import { Box } from '@mui/system'
 import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import Button from "@mui/material/Button";
@@ -12,8 +12,6 @@ const ChatList = () => {
 
   const dispatch = useAppDispatch()
   const { listChats } = useAppSelector(state => state.chat)
-
-
   const { isAuth, userName, userId } = useAppSelector(state => state.auth)
 
   const [ openCreateChat, setOpenCreateChat ] = useState(false);
@@ -44,10 +42,15 @@ const ChatList = () => {
 
         { listChats.map(chat =>
 
-          <Box key={chat.id}>
-            {chat.chat.name}
+          <Box sx={ { mt: '15px' } }>
+            <Paper
+              key={ chat.id }
+              elevation={ 3 }
+              sx={ { m: '10px', p: '10px', display: 'flex', justifyContent: 'center', cursor: 'pointer' } }
+            >
+              { chat.chat.name }
+            </Paper>
           </Box>
-
         ) }
 
         <CreateChatModal open={ openCreateChat } handleClose={ handleCloseCreateChat }/>

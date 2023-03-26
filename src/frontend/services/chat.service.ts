@@ -11,5 +11,9 @@ export const chatService = {
 
   async getAllUsers() {
     return instance.get('/allUsers')
+  },
+
+  async getMessages(currentChatId: string | null) {
+    return instance.post('/addMessage', { currentChatId })
   }
 }
