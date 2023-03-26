@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ListChats } from "@entity";
+import { ListChats, User } from "@entity";
 
 
 type ListChatsState = {
   listChats: ListChats[]
   currentChatId: string | null
+  allUsers: User[]
 }
 
 const initialState: ListChatsState = {
   listChats: [],
-  currentChatId: null
+  currentChatId: null,
+  allUsers: [],
 }
 
 const chatSlice = createSlice({
@@ -22,8 +24,11 @@ const chatSlice = createSlice({
     setCurrentChatId(state, action) {
       state.currentChatId = action.payload
     },
+    setAllUsers(state, action) {
+      state.allUsers = action.payload
+    }
   }
 })
 
-export const { setListChats, setCurrentChatId } = chatSlice.actions
+export const { setListChats, setCurrentChatId, setAllUsers } = chatSlice.actions
 export default chatSlice.reducer

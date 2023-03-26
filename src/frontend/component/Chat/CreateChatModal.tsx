@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { Box, Button, Modal, TextField } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  SelectChangeEvent,
+  TextField
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { IModalProps } from "@src/frontend/types";
 import { chatService } from "@src/frontend/services/chat.service";
-import { setListChats } from "@src/frontend/store/Slice/chatSlice";
+import { setAllUsers, setListChats } from "@src/frontend/store/Slice/chatSlice";
 
 
 const style = {
@@ -24,11 +34,16 @@ const style = {
 const CreateChatModal = ({ open, handleClose }: IModalProps) => {
 
   const dispatch = useAppDispatch()
+  const createUserId = useAppSelector(state => state.auth.userId)
+  const { allUsers } = useAppSelector(state => state.chat)
 
   const [ chatName, setChatName ] = useState('')
   const [ userName, setUserName ] = useState('')
 
-  const createUserId = useAppSelector(state => state.auth.userId)
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setUserName(event.target.value as string);
+  };
 
   const sendCreateChat = () => {
 
@@ -53,6 +68,13 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
     })
   };
 
+  useEffect(() => {
+    chatService.getAllUsers().then(res => {
+      dispatch(setAllUsers(res.data))
+      return res.data
+    })
+  }, [])
+
   return (
     <div>
       <Modal
@@ -72,6 +94,25 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
             onChange={ e => setChatName(e.target.value) }
           />
 
+          <Box sx={ { minWidth: 120, mt: '20px'} }>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">userName</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={ userName }
+                label="Введите userName друга"
+                onChange={ handleChange }
+              >
+                { allUsers.map(user =>
+                  <MenuItem>
+                    { user.name }
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Box>
+          {/*
           <TextField sx={ { mt: '20px' } }
                      id='outlined-textarea'
                      label='Введи userName друга'
@@ -80,6 +121,7 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
                      value={ userName }
                      onChange={ e => setUserName(e.target.value) }
           />
+*/}
 
           <Button variant='contained'
                   sx={ { mt: '20px' } }
