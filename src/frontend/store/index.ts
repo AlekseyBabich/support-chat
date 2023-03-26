@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import appReducer from './Slice/appSlice'
 import authReducer from './Slice/authSlice'
+import chatSlice from "@src/frontend/store/Slice/chatSlice";
 import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
@@ -8,6 +9,7 @@ import storage from 'redux-persist/lib/storage'
 const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
+  chat: chatSlice,
 })
 
 const persistConfig = {

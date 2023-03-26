@@ -1,19 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Divider, Grid, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { useAppSelector } from "@src/frontend/store/Hooks/hook";
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import Button from "@mui/material/Button";
 import CreateChatModal from "@component/Chat/CreateChatModal";
+import { chatService } from "@src/frontend/services/chat.service";
+import { setListChats } from "@src/frontend/store/Slice/chatSlice";
 
 
 const ChatList = () => {
 
-  const { isAuth, userName } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const { listChats } = useAppSelector(state => state.chat)
+
+
+  const { isAuth, userName, userId } = useAppSelector(state => state.auth)
 
   const [ openCreateChat, setOpenCreateChat ] = useState(false);
   const handleOpenCreateChat = () => setOpenCreateChat(true);
   const handleCloseCreateChat = () => setOpenCreateChat(false);
 
+  useEffect(() => {
+    chatService.getListChats().then(res => {
+      dispatch(setListChats(res.data))
+      return
+    })
+  }, [])
 
   return (
     <Grid item md={ 3 }>
@@ -29,11 +41,14 @@ const ChatList = () => {
         <Divider variant={"middle"}
                  sx={{ mt: '15px' }}
         />
-        <Button variant='contained'
-                sx={ { m: '15px' } }
-        >
-          Тут будут списки чатов
-        </Button>
+
+        { listChats.map(chat =>
+
+          <Box key={chat.id}>
+            {chat.chat.name}
+          </Box>
+
+        ) }
 
         <CreateChatModal open={ openCreateChat } handleClose={ handleCloseCreateChat }/>
       </Paper>

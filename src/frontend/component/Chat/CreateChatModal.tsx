@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Button, Modal, TextField } from "@mui/material";
-import { useAppSelector } from "@src/frontend/store/Hooks/hook";
+import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { IModalProps } from "@src/frontend/types";
 import { chatService } from "@src/frontend/services/chat.service";
+import { setListChats } from "@src/frontend/store/Slice/chatSlice";
 
 
 const style = {
@@ -22,6 +23,8 @@ const style = {
 
 const CreateChatModal = ({ open, handleClose }: IModalProps) => {
 
+  const dispatch = useAppDispatch()
+
   const [ chatName, setChatName ] = useState('')
   const [ userName, setUserName ] = useState('')
 
@@ -37,14 +40,18 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
       alert('userName обязательно!')
       return
     }
+
     chatService.createChat(chatName, userName, createUserId).then((data) => {
+      chatService.getListChats().then(res => {
+        dispatch(setListChats(res.data))
         return
       })
-
-
-    setChatName('')
-    setUserName('')
-  }
+      setChatName('')
+      setUserName('')
+      handleClose()
+      return
+    })
+  };
 
   return (
     <div>
@@ -59,30 +66,31 @@ const CreateChatModal = ({ open, handleClose }: IModalProps) => {
             autoFocus
             id='outlined-textarea'
             label='Введите Chat Name'
-            multiline={false}
+            multiline={ false }
             fullWidth
             value={ chatName }
             onChange={ e => setChatName(e.target.value) }
           />
 
-          <TextField sx={{ mt: '20px' }}
-            id='outlined-textarea'
-            label='Введи userName друга'
-            multiline={false}
-            fullWidth
-            value={ userName }
-            onChange={ e => setUserName(e.target.value) }
+          <TextField sx={ { mt: '20px' } }
+                     id='outlined-textarea'
+                     label='Введи userName друга'
+                     multiline={ false }
+                     fullWidth
+                     value={ userName }
+                     onChange={ e => setUserName(e.target.value) }
           />
 
           <Button variant='contained'
                   sx={ { mt: '20px' } }
                   onClick={ sendCreateChat }
-          >Создать чат</Button>
+          >
+            Создать чат
+          </Button>
 
         </Box>
       </Modal>
     </div>
   );
-};
-
+}
 export default CreateChatModal;

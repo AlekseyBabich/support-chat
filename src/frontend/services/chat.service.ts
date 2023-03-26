@@ -4,4 +4,12 @@ export const chatService = {
   async createChat(chatName: string, userName: string, createUserId: string | null) {
     return instance.post('/createChat', { userName, chatName, createUserId })
   },
+
+  async getListChats() {
+    return instance.get('/listChats')
+  },
+
+  async getAllUsers() {
+    return instance.get('/allUsers')
+  }
 }
