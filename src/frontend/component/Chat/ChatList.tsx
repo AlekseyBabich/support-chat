@@ -11,7 +11,7 @@ import { setCurrentChatId, setListChats } from "@src/frontend/store/Slice/chatSl
 const ChatList = () => {
 
   const dispatch = useAppDispatch()
-  const { listChats } = useAppSelector(state => state.chat)
+  let { listChats } = useAppSelector(state => state.chat)
   const { isAuth, userName, userId } = useAppSelector(state => state.auth)
 
   const [ openCreateChat, setOpenCreateChat ] = useState(false);
@@ -22,12 +22,17 @@ const ChatList = () => {
     dispatch(setCurrentChatId(id))
   }
 
+  const reverseListChats = [...listChats].reverse()
+
   useEffect(() => {
     chatService.getListChats().then(res => {
       dispatch(setListChats(res.data))
       return
     })
   }, [])
+
+
+
 
   return (
     <Grid item md={ 3 }>
@@ -44,7 +49,7 @@ const ChatList = () => {
                  sx={{ mt: '15px' }}
         />
 
-        { listChats.map(chat =>
+        { reverseListChats.map(chat =>
 
           <Box sx={ { mt: '15px' } }>
             <Paper
