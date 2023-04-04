@@ -37,7 +37,7 @@ const ChatList = () => {
   return (
     <Grid item md={ 3 }>
       <Paper elevation={ 3 }
-             sx={ { height: '720px', justifyContent: 'center' } }
+             sx={ { height: '720px', justifyContent: 'center', overflow: 'auto' } }
       >
           <Button variant='contained'
                   sx={ { ml: '50px', mt: '15px' } }

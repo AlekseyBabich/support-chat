@@ -3,15 +3,15 @@ import { ListChats, User } from "@entity";
 
 
 type ListChatsState = {
+  allUsers: User[]
   listChats: ListChats[]
   currentChatId: string | null
-  allUsers: User[]
 }
 
 const initialState: ListChatsState = {
+  allUsers: [],
   listChats: [],
   currentChatId: null,
-  allUsers: [],
 }
 
 const chatSlice = createSlice({
