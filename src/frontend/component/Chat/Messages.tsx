@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../store/Hooks/hook';
 import { sendMessage } from "@src/frontend/store/Slice/appSlice";
 import ListMessage from "@component/Chat/ListMessage";
 import InputField from "@component/Chat/InputField";
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseRealtimePayload } from '@supabase/supabase-js'
 
 export interface IMessage {
   id: number
@@ -24,7 +24,9 @@ const Messages = () => {
     .from('ChatMessages')
     .on('INSERT', (payload) => console.log(payload)
     )
-    .subscribe()
+    .subscribe((err: any) => {
+      console.log(err)
+    })
 
 
   const addMessage = () => {
