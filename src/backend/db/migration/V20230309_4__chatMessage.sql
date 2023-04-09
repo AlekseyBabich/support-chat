@@ -19,18 +19,9 @@ begin
 end;
 $$ language plpgsql stable;
 
-CREATE OR REPLACE FUNCTION public.getChatUserId()
-    RETURNS text
-AS $$
-    #variable_conflict use_variable
-BEGIN
-    return auth.participant_id();
-END;
-$$ LANGUAGE PLPGSQL IMMUTABLE;
-
 alter table "ChatMessages" enable row level security;
 create policy "Allow user read access" on public."ChatMessages" for select
-    using (public.getChatUserId() = "userId");
+    using (auth.participant_id() = "userId");
 grant all on table "ChatMessages" to anon, authenticated, service_role, postgres;
 drop publication if exists supabase_realtime;
 create publication supabase_realtime;
