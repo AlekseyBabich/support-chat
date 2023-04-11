@@ -12,16 +12,22 @@ create or replace function auth.participant_id()
 as $$
 declare
     chat_user_id text;
+    chat_id text;
 begin
     select current_setting('request.jwt.claims', true)::jsonb->'user_metadata'->>'chat_user_id'
     into chat_user_id;
-    return chat_user_id;
-end;
+
+    select "chatId" from "ChatUsers"
+        where "userId" = chat_user_id
+        into chat_id;
+
+    return chat_id;
+end
 $$ language plpgsql stable;
 
 alter table "ChatMessages" enable row level security;
 create policy "Allow user read access" on public."ChatMessages" for select
-    using (auth.participant_id() = "userId");
+    using (auth.participant_id() = "chatId" );
 grant all on table "ChatMessages" to anon, authenticated, service_role, postgres;
 drop publication if exists supabase_realtime;
 create publication supabase_realtime;
