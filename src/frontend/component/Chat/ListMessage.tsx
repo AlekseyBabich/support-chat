@@ -11,7 +11,7 @@ const ListMessage: React.FC = () => {
   return (
     <Box sx={ { p: '10px' } }>
       { messages.map(message =>
-        <Box sx={ { p: '5px', wordWrap: 'break-word' } }>
+        <Box sx={ { p: '5px', wordWrap: 'break-word' } } key={ message.id }>
           <Paper key={ message.id }
                  elevation={ 3 }
                  sx={ { p: '10px' } }

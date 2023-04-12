@@ -1,4 +1,4 @@
-import {ExtendableContext} from "koa";
+import { DefaultState, ExtendableContext } from "koa";
 import {Pool} from "pg";
 import backend from "@config/backend";
 import {makeDB} from "@db";
@@ -9,10 +9,11 @@ const db = makeDB(dbPool)
 const users = makeUsers(db)
 
 export function GetAllUsers(){
-  return async (ctx: ExtendableContext) => {
+  return async (ctx: ExtendableContext & {state: DefaultState}) => {
+    const userId = ctx.state.user.user_metadata.chat_user_id
 
     await db.withTransaction( async (con) => {
-      const allUsers = await users.selectAll(con, 'name', 'asc', 0, 'all')
+      let allUsers = await users.selectAll(con, 'name', 'asc', 0, 'all')
 
       if(!allUsers){
         ctx.body = {
@@ -21,6 +22,8 @@ export function GetAllUsers(){
         }
         return 'error'
       }
+
+      allUsers = allUsers.filter((item) => { return item.id != userId })
 
       ctx.body = allUsers
       return 'ok'
