@@ -8,26 +8,25 @@ create table if not exists "ChatMessages" (
 );
 
 create or replace function auth.participant_id()
-    returns text
+    returns text[]
 as $$
 declare
     chat_user_id text;
-    chat_id text;
+    chat_ids text[];
 begin
     select current_setting('request.jwt.claims', true)::jsonb->'user_metadata'->>'chat_user_id'
     into chat_user_id;
 
-    select "chatId" from "ChatUsers"
-        where "userId" = chat_user_id
-        into chat_id;
-
-    return chat_id;
+    select array_agg("chatId") from "ChatUsers"
+    where "userId" = chat_user_id
+    into chat_ids;
+    return chat_ids;
 end
 $$ language plpgsql stable;
 
 alter table "ChatMessages" enable row level security;
 create policy "Allow user read access" on public."ChatMessages" for select
-    using (auth.participant_id() = "chatId" );
+    using(auth.participant_id() @> array["chatId"]);
 grant all on table "ChatMessages" to anon, authenticated, service_role, postgres;
 drop publication if exists supabase_realtime;
 create publication supabase_realtime;
