@@ -31,6 +31,7 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
   const submitUserName = () => {
     if (!userName.trim().length) {
       alert('Имя обязательно!')
+      return;
     }
 
     //todo
@@ -40,8 +41,8 @@ const LoginModal = ({ open, handleClose }: IModalProps) => {
       if (link.data.status_code == 404) {
         router.push('/login')
         alert('Пользователя с таким именем нет')
+        return;
       }
-
       dispatch(setNewUserName({ name: userName }))
       dispatch(setNewUserId({ userId: link.data.userId }))
       router.push(link.data.body)

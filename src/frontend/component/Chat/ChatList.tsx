@@ -19,6 +19,7 @@ const ChatList = () => {
   const handleCloseCreateChat = () => setOpenCreateChat(false);
 
   const currentChat = (id: string) => {
+
     dispatch(setCurrentChatId(id))
   }
 

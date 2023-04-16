@@ -32,6 +32,7 @@ const SignupModal = ({ open, handleClose }: IModalProps) => {
   const submitUserName = () => {
     if (!userName.trim().length) {
       alert('Имя обязательно!')
+      return;
     }
 
     authService.createUser(userName).then((user) => {

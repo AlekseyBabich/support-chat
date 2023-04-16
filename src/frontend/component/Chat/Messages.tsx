@@ -6,6 +6,7 @@ import { sendMessage } from "@src/frontend/store/Slice/appSlice";
 import ListMessage from "@component/Chat/ListMessage";
 import InputField from "@component/Chat/InputField";
 import { createClient } from '@supabase/supabase-js'
+import frontend from '@config/frontend'
 
 export interface IMessage {
   id: number
@@ -14,23 +15,17 @@ export interface IMessage {
 
 const Messages = () => {
   const dispatch = useAppDispatch()
-  const { token, refreshToken } = useAppSelector(state => state.auth)
   const [ text, setText ] = useState('')
-  const supabaseUrl = 'http://localhost:8100'
-  const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjY1OTQzMjAwLAogICAgImV4cCI6IDE4MjM3MDk2MDAKfQ.XvP0jOBu9gNl5lIFd7OdQLgTxQLeN7K3OQR32ih6opg'
-  const supabase = createClient(supabaseUrl, apiKey)
+  const supabase = createClient(frontend.supabase.supabaseUrl, frontend.supabase.apiKey)
 
   useEffect(() => {
-    supabase.auth.setSession( { access_token: token as string, refresh_token: refreshToken as string  }).then(() => {
-        supabase
-          .from('ChatMessages')
-          .on('INSERT', (payload) => console.log(payload)
-          )
-          .subscribe((err: any) => {
-            console.log(err)
-          })
-      }
-    )
+      supabase
+        .from('ChatMessages')
+        .on('INSERT', (payload) => console.log(payload)
+        )
+        .subscribe((err: any) => {
+          console.log(err)
+        })
   }, [])
 
 
