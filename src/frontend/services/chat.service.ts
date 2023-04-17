@@ -13,7 +13,7 @@ export const chatService = {
     return instance.get('/allUsers')
   },
 
-  async getMessages(currentChatId: string | null) {
-    return instance.post('/addMessage', { currentChatId })
+  async addMessage(currentChatId: string | null, content: string | null) {
+    return instance.post('/addMessage', { chatId: currentChatId, content: content })
   }
 }

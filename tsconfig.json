@@ -30,6 +30,7 @@
       "@src/*": ["src/*"],
       "@component/*": ["src/frontend/component/*"],
       "@config/backend": ["src/config/backend"],
+      "@config/frontend": ["src/config/frontend"],
       "@db/*": ["src/backend/db/*"],
       "@db": ["src/backend/db/ScDB"],
       "@entity": ["src/common/entity"],

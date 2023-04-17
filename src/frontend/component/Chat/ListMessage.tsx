@@ -5,9 +5,7 @@ import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 
 
 const ListMessage: React.FC = () => {
-
-  const messages = useAppSelector(state => state.app.messages)
-
+  const messages = useAppSelector(state => state.chat.listMessages)
   return (
     <Box sx={ { p: '10px' } }>
       { messages.map(message =>
@@ -16,11 +14,10 @@ const ListMessage: React.FC = () => {
                  elevation={ 3 }
                  sx={ { p: '10px' } }
           >
-            { message.text }
+            { message.content }
           </Paper>
         </Box>
       ) }
-
     </Box>
   );
 };
