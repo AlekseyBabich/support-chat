@@ -39,7 +39,7 @@ const Messages = () => {
       <Paper elevation={ 3 }
              sx={ { height: '600px' } }
       >
-        <Box sx={ { height: '600px', p: '8px' } }>
+        <Box sx={ { height: '600px', p: '8px', marginBottom: '20px' } }>
           <ListMessage/>
         </Box>
         <Box>
