@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit";
 
 type IMessage = {
   id: number
@@ -17,14 +16,8 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    sendMessage(state, action: PayloadAction<string>) {
-      state.messages.push({
-        id: Date.now(),
-        text: action.payload
-      })
-    }
   }
 })
 
-export const { sendMessage } = appSlice.actions
+export const { } = appSlice.actions
 export default appSlice.reducer
