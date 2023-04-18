@@ -3,7 +3,7 @@ import { getTokens } from "@src/frontend/pages/api/Token";
 import { useRouter } from "next/router";
 import { setTokens } from "@src/frontend/store/Slice/authSlice";
 import { useAppDispatch, useAppSelector } from "@src/frontend/store/Hooks/hook";
-import { createClient, Session } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import frontend from "@config/frontend";
 
 const loginLink = () => {
@@ -15,8 +15,12 @@ const loginLink = () => {
 
   useEffect(() => {
     getTokens(authLoginLinkId).then((res) => {
-        supabase.auth.setSession( { access_token: res.accessToken, refresh_token: res.refreshToken }).then((session) => {
-          dispatch(setTokens({ accessToken: session.session?.access_token as string, refreshToken: session.session?.refresh_token as string}))
+        supabase.auth.setSession( { access_token: res.accessToken, refresh_token: res.refreshToken })
+          .then((session) => {
+          dispatch(
+            setTokens({
+              accessToken: session.session?.access_token as string,
+              refreshToken: session.session?.refresh_token as string}))
         })
     }
     );

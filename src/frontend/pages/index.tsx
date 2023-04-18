@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAppSelector } from "@src/frontend/store/Hooks/hook";
 import { useRouter } from "next/router";
-import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 
 
 export default function Home() {
