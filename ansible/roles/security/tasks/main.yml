@@ -1,0 +1,51 @@
+---
+- name: Install security apps
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - fail2ban
+  tags:
+    - secutiry
+
+- name: Stop fail2ban service
+  ansible.builtin.service:
+    name: fail2ban
+    state: stopped
+  tags:
+    - secutiry
+
+- name: Delete default debian config
+  ansible.builtin.file:
+    state: absent
+    path: /etc/fail2ban/jail.d/defaults-debian.conf
+  tags:
+    - secutiry
+
+- name: Copy files
+  ansible.builtin.copy:
+    src: "files/{{ item }}"
+    dest: "/etc/fail2ban/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - "jail.d/sshd.conf"
+  tags:
+    - secutiry
+
+- name: Start fail2ban service
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+  tags:
+    - secutiry
+
+# - name: UFW - allow OpenSSH service
+#   ufw:
+#     rule: allow
+#     name: OpenSSH
+#   tags:
+#     - ufw
