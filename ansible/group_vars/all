@@ -12,9 +12,3 @@ docker_compose_path: /usr/local/bin/docker-compose
 
 # Jenkins
 jenkins_key_url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-jenkins_port: 8080
-
-# Nginx
-service_name: chat
-domain_name: vsquad.ru
-jenkins_domain_name: jenkins.vsquad.ru

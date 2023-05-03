@@ -1,0 +1,24 @@
+---
+- name: Register email
+  vars:
+    email: kazancevstepan0@gmail.com
+  shell: |
+    certbot -n register --agree-tos --email {{ email }}
+    touch /etc/letsencrypt/.registered
+  args:
+    creates: /etc/letsencrypt/.registered
+
+- name: Setup cronjob for renewal
+  cron:
+    name: certbot-renewal
+    job: "/bin/bash -lc '/usr/local/bin/certbot -q renew'"
+    minute: "0"
+    hour: "14"
+
+- name: Get certificate
+  vars:
+    domain_name: jenkins.vsquad.ru
+  command: certbot -n --nginx -d {{ domain_name }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domain_name }}
+  ignore_errors: true
