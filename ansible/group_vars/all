@@ -1,0 +1,14 @@
+# Ansible
+ansible_ssh_private_key_file: "~/.ssh/ansible"
+ansible_user: "root"
+
+# Time zone
+timezone: "Etc/UTC"
+
+# Docker and docker-compose
+docker_compose_version: "v2.10.2"
+docker_compose_url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+docker_compose_path: /usr/local/bin/docker-compose
+
+# Jenkins
+jenkins_key_url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key

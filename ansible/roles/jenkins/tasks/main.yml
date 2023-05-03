@@ -1,0 +1,36 @@
+---
+- name: install wget
+  apt:
+    name: wget
+    state: present
+
+- name: install openjdk
+  apt:
+    name: openjdk-11-jre-headless
+    state: present
+
+- name: import jenkins key
+  apt_key:
+    state: present
+    url: "{{ jenkins_key_url }}"
+
+- name: copy jenkins.list to /etc/apt/sources.list.d/jenkins.list
+  copy:
+    src: jenkins.list
+    dest: /etc/apt/sources.list.d/jenkins.list
+
+- name: install jenkins
+  apt:
+    name: jenkins
+    update_cache: yes
+    install_recommends: no
+
+- name: start jenkins
+  systemd:
+    name: jenkins
+    state: started
+
+- name: enable jenkins
+  systemd:
+    name: jenkins
+    enabled: true

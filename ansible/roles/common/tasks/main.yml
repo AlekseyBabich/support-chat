@@ -1,0 +1,54 @@
+---
+
+- name: Ensure apt list dir exists
+  ansible.builtin.file:
+    path: /var/lib/apt/lists/
+    state: directory
+    mode: 0755
+
+- name: Upgrade system
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Check if reboot is required
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+    get_md5: false
+  register: reboot_required_file
+
+- name: Reboot the server (if required)
+  ansible.builtin.reboot:
+  when: reboot_required_file.stat.exists == true
+
+- name: Remove dependencies that are no longer required
+  ansible.builtin.apt:
+    autoremove: true
+
+- name: Install usefull apps
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    name: "{{ packages }}"
+    autoremove: true
+    install_recommends: false
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+      - python3-apt
+      - python3-pip
+      - python3-docker
+      - mc
+      - htop
+      - vim
+      - iptables-persistent
+      - zip
+
+- name: Set timezone to "{{ timezone }}"
+  community.general.timezone:
+    name: "{{ timezone }}"

@@ -1,0 +1,6 @@
+pokerswap:
+  hosts:
+    chat:
+      ansible_host: 95.140.146.164
+  vars:
+    ansible_user: root

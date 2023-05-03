@@ -16,7 +16,7 @@ async function main() {
   const frontendEnv = process.env.FRONTEND_ENV ?? 'dev'
 
   const koaServerPort =
-    process.env.FRONTEND_ENV ? Number( process.env.FRONTEND_ENV ) : 8080
+    process.env.FRONTEND_ENV ? Number( process.env.FRONTEND_ENV ) : 8900
 
   const nextApp = next( {
     // implicit conf: ./next.backend.js

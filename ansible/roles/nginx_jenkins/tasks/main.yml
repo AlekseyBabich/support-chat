@@ -1,0 +1,43 @@
+---
+- name: Install Nginx Web Server
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    state: present
+    name: "{{ packages }}"
+    install_recommends: false
+  vars:
+    packages:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+
+- name: Replace nginx.conf
+  template:
+    src=templates/nginx.conf.j2
+    dest=/etc/nginx/nginx.conf
+
+- name: Remove nginx default configuration
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Add nginx status endpoint
+  template:
+    src=templates/nginx_status.conf.j2
+    dest=/etc/nginx/conf.d/status.conf
+
+- name: Add proxy config for jenkins
+  vars:
+    service_name: jenkins
+    domain_name: jenkins.vsquad.ru
+    cors_headers: DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,X-Session-Id
+    service_port: 8080
+  template:
+    src=nginx_reverse_proxy.conf.j2
+    dest=/etc/nginx/conf.d/{{ service_name }}.conf
+
+- name: Restart nginx service
+  service: name=nginx state=restarted enabled=yes
+  become: true
+  become_user: root

@@ -1,0 +1,11 @@
+---
+- hosts: "{{ target | default('all') }}"
+  user: "{{ ansible_user }}"
+  become: true
+
+  roles:
+    - hostname
+    - common
+    - docker
+    - security
+    - nginx_prod
