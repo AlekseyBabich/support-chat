@@ -1,0 +1,55 @@
+---
+- name: Install base packages
+  apt:
+    name:
+      - software-properties-common
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+
+- name: Add the Oracle Java (JDK) Installer PPA
+  apt_repository:
+    repo: ppa:linuxuprising/java
+    state: present
+    update_cache: true
+    mode: 0644
+
+- name: Accept license (JDK)
+  debconf:
+    name: oracle-java17-installer
+    question: shared/accepted-oracle-license-v1-3
+    answer: 'true'
+    vtype: select
+
+- name: Install Oracle Java
+  apt:
+    name: oracle-java17-installer
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+
+- name: Set default Java
+  alternatives:
+    name: java
+    path: /usr/lib/jvm/java-17-oracle/bin/java
+
+- name: Get /etc/environment permissions
+  stat:
+    path: /etc/environment
+    get_checksum: false
+    get_mime: false
+  register: etc_environment_stat
+
+- name: Set JAVA_HOME variable
+  lineinfile:
+    path: /etc/environment
+    regexp: '^JAVA_HOME='
+    line: JAVA_HOME=/usr/lib/jvm/java-17-oracle
+    mode: '{{ etc_environment_stat.stat.mode }}'
+
+- name: Set INSTALL4J_JAVA_HOME variable
+  lineinfile:
+    path: /etc/environment
+    regexp: '^INSTALL4J_JAVA_HOME='
+    line: INSTALL4J_JAVA_HOME=/usr/lib/jvm/java-17-oracle
+    mode: '{{ etc_environment_stat.stat.mode }}'

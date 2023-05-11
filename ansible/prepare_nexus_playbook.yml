@@ -4,5 +4,8 @@
   become: true
 
   roles:
-#    - nginx_jenkins
-    - jenkins
+#    - nginx_nexus
+#    - certbot
+#    - oracle_java
+#    - nexus
+    - docker_pull

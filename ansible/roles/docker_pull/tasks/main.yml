@@ -1,0 +1,17 @@
+---
+- name: Allow registry in daemon docker
+  vars:
+    docker_registry_host: nexus.vsquad.ru
+    docker_registry_port: 8082
+  template:
+    src=template/daemon.conf.j2
+    dest=/etc/docker/daemon.json
+
+- name: Ensure a container is pulling
+  docker_container:
+    name: node
+    state: started
+    image: "nexus.vsquad.ru:8082/node:latest"
+    pull: true
+    ports:
+      - "5000:5000"

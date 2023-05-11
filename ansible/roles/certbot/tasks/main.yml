@@ -15,10 +15,34 @@
     minute: "0"
     hour: "14"
 
-- name: Get certificate
+- name: Get certificate frontend
   vars:
-    domain_name: jenkins.vsquad.ru
-  command: certbot -n --nginx -d {{ domain_name }}
+    frontend_domain_name: support-chat.vsquad.ru
+  command: certbot -n --nginx -d {{ frontend_domain_name }}
   args:
-    creates: /etc/letsencrypt/live/{{ domain_name }}
+    creates: /etc/letsencrypt/live/{{ frontend_domain_name }}
+  ignore_errors: true
+
+- name: Get certificate backend
+  vars:
+    backend_domain_name: support-chat-api.vsquad.ru
+  command: certbot -n --nginx -d {{ backend_domain_name }}
+  args:
+    creates: /etc/letsencrypt/live/{{ backend_domain_name }}
+  ignore_errors: true
+
+- name: Get certificate jenkins
+  vars:
+    jenkins_domain_name: jenkins.vsquad.ru
+  command: certbot -n --nginx -d {{ jenkins_domain_name }}
+  args:
+    creates: /etc/letsencrypt/live/{{ jenkins_domain_name }}
+  ignore_errors: true
+
+- name: Get certificate nexus
+  vars:
+    nexus_domain_name: nexus.vsquad.ru
+  command: certbot -n --nginx -d {{ nexus_domain_name }}
+  args:
+    creates: /etc/letsencrypt/live/{{ nexus_domain_name }}
   ignore_errors: true
