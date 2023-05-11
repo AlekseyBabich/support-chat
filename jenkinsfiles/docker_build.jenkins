@@ -15,9 +15,9 @@ pipeline {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                sh """
-                docker login -u neo -p admin123 nexus.vsquad.ru:8082
-                """
+                {
+                    sh 'docker login -u neo -p admin123 nexus.vsquad.ru:8082'
+                }
             }
         }
         stage("create docker image") {
