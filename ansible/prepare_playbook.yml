@@ -9,3 +9,6 @@
     - docker
     - security
     - nginx_prod
+    - nginx_jenkins
+    - nginx_nexus
+    - certbot
