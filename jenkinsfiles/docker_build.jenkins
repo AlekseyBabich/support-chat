@@ -4,7 +4,7 @@ properties([disableConcurrentBuilds()])
 
 pipeline {
     agent {
-        label 'мастер'
+        label 'develop'
         }
     triggers { pollSCM('* * * * *') }
     options {
