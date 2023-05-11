@@ -15,9 +15,9 @@ pipeline {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                withCredentials([usernamePassword(credentialsId: 'dockerhub_semaev', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'nexus.vsquad.ru:8082', usernameVariable: 'neo', passwordVariable: 'admin123')]) {
                     sh """
-                    docker login -u $USERNAME -p $PASSWORD
+                    docker login -u neo -p admin123
                     """
                 }
             }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 echo " ============== start building image =================="
                 dir ('docker/toolbox') {
-                	sh 'docker build -t semaev/toolbox:latest . '
+                	sh 'docker build -t nexus.vsquad.ru:8082/toolbox:latest . '
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 echo " ============== start pushing image =================="
                 sh '''
-                docker push semaev/toolbox:latest
+                docker push nexus.vsquad.ru:8082/toolbox:latest
                 '''
             }
         }
