@@ -1,22 +1,36 @@
-- name: Ensure jenkins directory on docker host
-  file:
-    state: directory
-    owner: 1000
-    group: 1000
-    path: /share/jenkins
-
-- name: Pull the latest official jenkins docker image
-  docker_image:
-    name: "jenkins:jenkins"
-
-- name: Create a container from the jenkins docker image
-  docker_container:
-    name: "jenkins-server"
-    image: "jenkins"
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - "/share/jenkins:/var/jenkins_home"
+---
+- name: install wget
+  apt:
+    name: wget
     state: present
-    recreate: no
+
+- name: install openjdk
+  apt:
+    name: openjdk-11-jre-headless
+    state: present
+
+- name: import jenkins key
+  apt_key:
+    state: present
+    url: "{{ jenkins_key_url }}"
+
+- name: copy jenkins.list to /etc/apt/sources.list.d/jenkins.list
+  copy:
+    src: jenkins.list
+    dest: /etc/apt/sources.list.d/jenkins.list
+
+- name: install jenkins
+  apt:
+    name: jenkins
+    update_cache: yes
+    install_recommends: no
+
+- name: start jenkins
+  systemd:
+    name: jenkins
+    state: started
+
+- name: enable jenkins
+  systemd:
+    name: jenkins
+    enabled: true
