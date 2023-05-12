@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo " ============== start building image =================="
                 dir ('docker') {
-                	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile ./docker'
+                	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile .'
                 }
             }
         }
