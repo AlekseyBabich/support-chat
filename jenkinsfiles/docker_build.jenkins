@@ -21,8 +21,8 @@ pipeline {
         stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
-                dir ('docker/toolbox') {
-                	sh 'docker build -t nexus.vsquad.ru:8082/toolbox:latest . '
+                dir ('docker/frontend.dockerfile') {
+                	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest . '
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 echo " ============== start pushing image =================="
                 sh '''
-                docker push nexus.vsquad.ru:8082/toolbox:latest
+                docker push nexus.vsquad.ru:8082/frontend:latest
                 '''
             }
         }

@@ -5,4 +5,5 @@
 
   roles:
 #    - nginx_jenkins
-    - jenkins
+    - docker
+#    - jenkins

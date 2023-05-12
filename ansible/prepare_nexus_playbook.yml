@@ -7,5 +7,5 @@
 #    - nginx_nexus
 #    - certbot
 #    - oracle_java
-#    - nexus
-    - docker_pull
+    - nexus
+#    - docker_pull
