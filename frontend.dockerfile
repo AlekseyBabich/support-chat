@@ -3,10 +3,8 @@ RUN mkdir -p /opt/support-chat && chown -R node:node /opt/support-chat
 WORKDIR /opt/support-chat
 USER node
 COPY --chown=node:node src/frontend ./src/frontend
-COPY --chown=node:node package.json ./package.json
-COPY --chown=node:node tsconfig.json ./tsconfig.json
-COPY --chown=node:node yarn.lock ./yarn.lock
 COPY --chown=node:node package.json tsconfig.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --network-timeout 1000000
+RUN yarn frontend-build
 ENTRYPOINT  ["yarn"]
-CMD [ "support-chat-frontend" ]
+CMD [ "frontend" ]

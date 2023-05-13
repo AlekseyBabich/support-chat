@@ -21,7 +21,7 @@ pipeline {
         stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
-                dir ('docker') {
+                dir ('./') {
                 	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile .'
                 }
             }
