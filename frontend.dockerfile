@@ -4,7 +4,5 @@ WORKDIR /opt/support-chat
 USER node
 COPY --chown=node:node src/frontend ./src/frontend
 COPY --chown=node:node package.json tsconfig.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-RUN yarn frontend-build
 ENTRYPOINT  ["yarn"]
-CMD [ "frontend" ]
+CMD [ "frontend", "frontend-build" ]
