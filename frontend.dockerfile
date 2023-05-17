@@ -5,7 +5,6 @@ USER node
 COPY --chown=node:node package.json tsconfig.json ./
 RUN yarn config delete proxy
 RUN yarn install --frozen-lockfile
+RUN yarn frontend-build
 COPY --chown=node:node src ./src
-EXPOSE 8900
-ENTRYPOINT  ["yarn"]
-CMD [ "frontend-build", "frontend" ]
+CMD [ "yarn", "frontend" ]
