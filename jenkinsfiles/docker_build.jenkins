@@ -39,7 +39,7 @@ pipeline {
         success {
             withCredentials([string(credentialsId: 'tokenBot', variable: 'TOKEN'), string(credentialsId: 'chatWebId', variable: 'CHAT_ID')]) {
                 sh  ("""
-            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d parse_mode=HTML -d text='<div><h3>$env.JOB_NAME<h3/> : POC Branch: $env.GIT_BRANCH Build: OK Published = YES<div/>
+            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text='$env.JOB_NAME : POC Branch: $env.GIT_BRANCH Build: OK Published = YES
         """)
             }
         }
@@ -47,7 +47,7 @@ pipeline {
         aborted {
             withCredentials([string(credentialsId: 'tokenBot', variable: 'TOKEN'), string(credentialsId: 'chatWebId', variable: 'CHAT_ID')]) {
                 sh  ("""
-            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d parse_mode=HTML -d text='<div>$env.JOB_NAME : POC Branch: $env.GIT_BRANCH Build : Aborted Published = Aborted<div/>'
+            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text='$env.JOB_NAME : POC Branch: $env.GIT_BRANCH Build : Aborted Published = Aborted'
         """)
             }
 
@@ -55,7 +55,7 @@ pipeline {
         failure {
             withCredentials([string(credentialsId: 'tokenBot', variable: 'TOKEN'), string(credentialsId: 'chatWebId', variable: 'CHAT_ID')]) {
                 sh  ("""
-            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d parse_mode=HTML -d text='<div>$env.JOB_NAME : POC  Branch: $env.GIT_BRANCH Build : not OK Published = no<div/>'
+            curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text='$env.JOB_NAME : POC  Branch: $env.GIT_BRANCH Build : not OK Published = no'
         """)
             }
         }
