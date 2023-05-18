@@ -33,7 +33,8 @@ pipeline {
                 docker push nexus.vsquad.ru:8082/frontend:latest
                 '''
             }
-        stage("send message to telegram")
+        }
+        stage("send message to telegram") {
             steps {
                 post {
                     success {
