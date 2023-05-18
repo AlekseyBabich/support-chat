@@ -34,7 +34,7 @@ pipeline {
                 '''
             }
         }
-        stage('docker pull') {
+        stage("docker pull") {
             steps {
                 sh 'ansible-playbook -i ansible/inventories/inventory.yml ansible/prepare_docker_pull_playbook.yml'
             }
