@@ -15,7 +15,7 @@ pipeline {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                sh 'docker login -u neo -p admin123 nexus.vsquad.ru:8082'
+                sh 'docker login -u stepankazancev -p Neo_GTSK2013!'
             }
         }
         stage("create docker image") {
@@ -24,6 +24,9 @@ pipeline {
                 dir ('./') {
                 	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile .'
                 }
+                dir ('./') {
+                    sh 'docker build -t nexus.vsquad.ru:8082/backend:latest -f backend.dockerfile .'
+                }
             }
         }
         stage("docker push") {
@@ -31,12 +34,8 @@ pipeline {
                 echo " ============== start pushing image =================="
                 sh '''
                 docker push nexus.vsquad.ru:8082/frontend:latest
+                docker push nexus.vsquad.ru:8082/backend:latest
                 '''
-            }
-        }
-        stage("docker pull") {
-            steps {
-                sh 'ansible-playbook -i ansible/inventories/inventory.yml ansible/prepare_docker_pull_playbook.yml'
             }
         }
 //        stage("send message to telegram") {
