@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  **/
 
-const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8081'
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:5100'
 
 const nextConfig = {
     typescript: {
