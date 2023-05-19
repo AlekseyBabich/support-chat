@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import store from "@src/frontend/store";
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5100',
+  baseURL: 'https://support-chat-api.vsquad.ru',
 });
 
 instance.interceptors.request.use(setTokenToHeaders as any)

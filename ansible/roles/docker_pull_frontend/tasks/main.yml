@@ -1,0 +1,17 @@
+---
+- name: Allow registry in daemon docker
+  vars:
+    docker_registry_host: nexus.vsquad.ru
+    docker_registry_port: 8082
+  template:
+    src=template/daemon.conf.j2
+    dest=/etc/docker/daemon.json
+
+- name: Ensure a container is pulling frontend
+  docker_container:
+    name: node
+    state: started
+    image: "stepankazancev/frontend:latest"
+    pull: true
+    ports:
+      - "8900:8900"

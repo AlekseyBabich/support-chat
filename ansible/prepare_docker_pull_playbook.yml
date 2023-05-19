@@ -4,4 +4,5 @@
   become: true
 
   roles:
-    - docker_pull
+    - docker_pull_frontend
+    - docker_pull_backend
