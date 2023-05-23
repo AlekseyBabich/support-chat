@@ -11,7 +11,7 @@
   docker_container:
     name: node
     state: started
-    image: "stepankazancev/backend:latest"
+    image: "nexus.vsquad.ru:8082/backend:latest"
     pull: true
     ports:
       - "5100:5100"

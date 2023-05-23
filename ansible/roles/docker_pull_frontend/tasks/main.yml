@@ -11,7 +11,7 @@
   docker_container:
     name: node
     state: started
-    image: "stepankazancev/frontend:latest"
+    image: "nexus.vsquad.ru:8082/frontend:latest"
     pull: true
     ports:
       - "8900:8900"

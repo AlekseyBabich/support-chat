@@ -8,13 +8,13 @@ function backend() {
         jwtSecret: `${process.env.JWT_SECRET}`,
         frontendURL: `${process.env.FRONTEND_URL}`,
         db: {
-            host: '95.140.146.164',
+            host: '80.243.141.233',
             port: 5432,
             user: 'postgres',
             password: 'postgres',
             database: 'chat',
             serviseRoleKey: `${process.env.SERVICE_ROLE_KEY}`,
-            supabaseUrl: 'http://95.140.146.164:8100'
+            supabaseUrl: 'http://80.243.141.233:8100'
         }
     }
 }
