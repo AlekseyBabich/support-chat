@@ -6,6 +6,7 @@ export default function Cors(): Middleware {
     if (backend.CORS)
         return cors({
             allowHeaders: ['x-session-id', 'authorization', 'content-type'],
+            allowMethods: ["GET,HEAD,PUT,POST,DELETE,PATCH"],
             credentials: () => true
         })
     else

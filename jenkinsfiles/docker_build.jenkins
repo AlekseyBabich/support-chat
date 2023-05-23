@@ -15,17 +15,17 @@ pipeline {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                sh 'docker login -u stepankazancev -p Neo_GTSK2013!'
+                sh 'docker login -u neo -p admin123 nexus.vsquad.ru:8082/frontend:latest'
             }
         }
         stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
                 dir ('./') {
-                	sh 'docker build -t stepankazancev/frontend:latest -f frontend.dockerfile .'
+                	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile .'
                 }
                 dir ('./') {
-                    sh 'docker build -t stepankazancev/backend:latest -f backend.dockerfile .'
+                    sh 'docker build -t nexus.vsquad.ru:8082/backend:latest -f backend.dockerfile .'
                 }
             }
         }
@@ -33,8 +33,8 @@ pipeline {
             steps {
                 echo " ============== start pushing image =================="
                 sh '''
-                docker push stepankazancev/frontend:latest
-                docker push stepankazancev/backend:latest
+                docker push nexus.vsquad.ru:8082/frontend:latest
+                docker push nexus.vsquad.ru:8082/backend:latest
                 '''
             }
         }
