@@ -15,8 +15,12 @@ const loginLink = () => {
 
   useEffect(() => {
     getTokens(authLoginLinkId).then((res) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         supabase.auth.setSession( { access_token: res.accessToken, refresh_token: res.refreshToken })
           .then((session) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
           dispatch(
             setTokens({
               accessToken: session.session?.access_token as string,
