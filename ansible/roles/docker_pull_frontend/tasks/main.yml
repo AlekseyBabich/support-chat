@@ -9,7 +9,7 @@
 
 - name: Ensure a container is pulling frontend
   docker_container:
-    name: node
+    name: frontend
     state: started
     image: "nexus.vsquad.ru:8082/frontend:latest"
     pull: true

@@ -38,6 +38,12 @@ pipeline {
                 '''
             }
         }
+        stage("docker pull via ansible") {
+            steps {
+                echo " ============== start pulling image =================="
+                ansiblePlaybook(credentialsId: 'ansible', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml')
+            }
+        }
 //        stage("send message to telegram") {
 //            post {
 //                success {

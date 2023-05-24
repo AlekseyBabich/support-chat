@@ -1,13 +1,41 @@
 ---
-- name: Prune old images and unused volumes
-  community.docker.docker_prune:
-    volumes: true
-    images: true
-    images_filters:
-      dangling: false
+- name: Stop backend
+  docker_container:
+    name: "backend"
+    state: absent
 
-- name: Prune dangling images
-  community.docker.docker_prune:
-    images: true
-    images_filters:
-      dangling: true
+- name: Remove Stoped backend container
+  shell: docker rm backend
+  ignore_errors: true
+
+- name: Get details of all images
+  docker_host_info:
+    images: yes
+    verbose_output: yes
+  register: image_info
+
+- name: Remove backend image
+  docker_image:
+    name: "nexus.vsquad.ru:8082/backend:latest"
+    state: absent
+
+- name: Stop frontend
+  docker_container:
+    name: "frontend"
+    state: absent
+
+- name: Remove Stoped frontend container
+  shell: docker rm frontend
+  ignore_errors: true
+
+- name: Get details of all images
+  docker_host_info:
+    images: yes
+    verbose_output: yes
+  register: image_info
+
+- name: Remove frontend image
+  docker_image:
+    name: "nexus.vsquad.ru:8082/frontend:latest"
+    state: absent
+

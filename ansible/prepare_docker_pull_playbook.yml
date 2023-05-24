@@ -4,5 +4,6 @@
   become: true
 
   roles:
+    - cleanup
     - docker_pull_frontend
     - docker_pull_backend

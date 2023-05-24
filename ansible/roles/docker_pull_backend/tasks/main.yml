@@ -9,7 +9,7 @@
 
 - name: Ensure a container is pulling backend
   docker_container:
-    name: node
+    name: backend
     state: started
     image: "nexus.vsquad.ru:8082/backend:latest"
     pull: true
