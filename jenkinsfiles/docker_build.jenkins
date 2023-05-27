@@ -41,7 +41,7 @@ pipeline {
         stage("docker pull via ansible") {
             steps {
                 echo " ============== start pulling image =================="
-                ansiblePlaybook credentialsId: 'ansible', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml'
+                ansiblePlaybook becomeUser: 'jenkins', credentialsId: 'ansible', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml'
             }
         }
 //        stage("send message to telegram") {
