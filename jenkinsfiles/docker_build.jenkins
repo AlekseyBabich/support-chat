@@ -44,6 +44,13 @@ pipeline {
                 ansiblePlaybook(credentialsId: 'ansible', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml')
             }
         }
+        stage("send message to telegram") {
+            post {
+                success {
+                    telegramSend(message: 'Hello World', chatId: -884385757)
+                }
+            }
+        }
 //        stage("send message to telegram") {
 //            post {
 //                success {
