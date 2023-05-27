@@ -41,7 +41,7 @@ pipeline {
         stage("docker pull via ansible") {
             steps {
                 echo " ============== start pulling image =================="
-                sh '/usr/bin/ansible-playbook ansible/prepare_docker_pull_playbook.yml -i ansible/inventories/inventory.yml --private-key /root/.ssh/ansible'
+                ansiblePlaybook(credentialsId: 'ansible', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml')
             }
         }
 //        stage("send message to telegram") {
