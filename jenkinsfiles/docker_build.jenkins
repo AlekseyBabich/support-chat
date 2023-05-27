@@ -46,9 +46,7 @@ pipeline {
         }
         stage("send message to telegram") {
             steps {
-                post {
-                    telegramSend(message: 'Build', chatId: -884385757)
-                }
+                telegramSend(message: 'Build', chatId: -884385757)
             }
         }
     }
