@@ -7,11 +7,11 @@
     src=template/daemon.conf.j2
     dest=/etc/docker/daemon.json
 
-- name: Ensure a container is pulling
+- name: Ensure a container is pulling backend
   docker_container:
-    name: node
+    name: backend
     state: started
-    image: "nexus.vsquad.ru:8082/node:latest"
+    image: "nexus.vsquad.ru:8082/backend:latest"
     pull: true
     ports:
-      - "5000:5000"
+      - "5100:5100"

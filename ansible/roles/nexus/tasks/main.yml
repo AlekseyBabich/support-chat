@@ -25,3 +25,5 @@
       - "8083:8083"
     volumes_from:
       - nexus3-data
+    state: started
+    recreate: no

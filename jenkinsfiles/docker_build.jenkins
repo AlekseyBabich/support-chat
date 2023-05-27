@@ -5,8 +5,8 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent {
         label 'built-in'
-        }
-    triggers { pollSCM('* * * * *') }
+    }
+    triggers { pollSCM('* */1 * * *') }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
@@ -15,18 +15,17 @@ pipeline {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
-                withCredentials([usernamePassword(credentialsId: 'nexus.vsquad.ru:8082', usernameVariable: 'neo', passwordVariable: 'admin123')]) {
-                    sh """
-                    docker login -u neo -p admin123
-                    """
-                }
+                sh 'docker login -u neo -p admin123 nexus.vsquad.ru:8082'
             }
         }
         stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
-                dir ('docker/toolbox') {
-                	sh 'docker build -t nexus.vsquad.ru:8082/toolbox:latest . '
+                dir ('./') {
+                	sh 'docker build -t nexus.vsquad.ru:8082/frontend:latest -f frontend.dockerfile .'
+                }
+                dir ('./') {
+                    sh 'docker build -t nexus.vsquad.ru:8082/backend:latest -f backend.dockerfile .'
                 }
             }
         }
@@ -34,8 +33,20 @@ pipeline {
             steps {
                 echo " ============== start pushing image =================="
                 sh '''
-                docker push nexus.vsquad.ru:8082/toolbox:latest
+                docker push nexus.vsquad.ru:8082/frontend:latest
+                docker push nexus.vsquad.ru:8082/backend:latest
                 '''
+            }
+        }
+        stage("docker pull via ansible") {
+            steps {
+                echo " ============== start pulling image =================="
+                ansiblePlaybook(credentialsId: 'ansible', inventory: 'ansible/inventories/inventory.yml', playbook: 'ansible/prepare_docker_pull_playbook.yml')
+            }
+        }
+        stage("send message to telegram") {
+            steps {
+                telegramSend(message: 'Build', chatId: -884385757)
             }
         }
     }

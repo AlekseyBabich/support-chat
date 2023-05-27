@@ -1,6 +1,6 @@
 pokerswap:
   hosts:
     chat:
-      ansible_host: 95.140.146.164
+      ansible_host: 80.243.141.233
   vars:
     ansible_user: root
