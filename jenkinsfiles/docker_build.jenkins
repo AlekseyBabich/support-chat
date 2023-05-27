@@ -46,7 +46,7 @@ pipeline {
         }
         stage("send message to telegram") {
             steps {
-                telegramSend(message: 'Build', chatId: -884385757)
+                sh 'curl https://api.telegram.org/bot6181588438:AAHxZsdYO9P7thNoLkNW2riJZltE75bXTZE/sendMessage -d chat_id=-884385757 -d text=\'Build\''
             }
         }
     }
