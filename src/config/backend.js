@@ -14,7 +14,7 @@ function backend() {
             password: 'postgres',
             database: 'chat',
             serviseRoleKey: `${process.env.SERVICE_ROLE_KEY}`,
-            supabaseUrl: 'http://80.243.141.233:8100'
+            supabaseUrl: 'http://localhost:8100'
         }
     }
 }
